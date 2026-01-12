@@ -6,15 +6,31 @@ const description = "Documentary editor. Systems-minded. Story-first.";
 const email = "mailto:justin.rosengarten@gmail.com";
 ---
 
-<BaseLayout title={title} description={description} canonical="https://justinrosengarten.com/">
+<BaseLayout
+  title={title}
+  description={description}
+  canonical="https://justinrosengarten.com/"
+>
   <main class="container">
-    <section class="card">
-      <h1>{title}</h1>
-      <p>{description}</p>
+    <section class="card hero">
+      <img
+        class="avatar"
+        src="/profile.avif"
+        alt="Portrait of Justin Rosengarten"
+        width="160"
+        height="160"
+        loading="eager"
+        decoding="async"
+      />
 
-      <div class="row">
-        <a class="btn primary" href={email}>Contact</a>
-        <a class="btn" href="#work">Work</a>
+      <div class="heroText">
+        <h1>{title}</h1>
+        <p>{description}</p>
+
+        <div class="row">
+          <a class="btn primary" href={email}>Contact</a>
+          <a class="btn" href="#work">Work</a>
+        </div>
       </div>
     </section>
 
