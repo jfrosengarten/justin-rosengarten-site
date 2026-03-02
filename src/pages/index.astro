@@ -3,7 +3,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "Justin Rosengarten";
 const description = "Documentary editor. Systems-minded. Story-first.";
-const email = "mailto:justin.rosengarten@gmail.com";
 ---
 
 <BaseLayout
@@ -11,52 +10,12 @@ const email = "mailto:justin.rosengarten@gmail.com";
   description={description}
   canonical="https://justinrosengarten.com/"
 >
-  <main class="container">
-    <section class="card hero">
-      <img
-        class="avatar"
-        src="/profile.avif"
-        alt="Portrait of Justin Rosengarten"
-        width="160"
-        height="160"
-        loading="eager"
-        decoding="async"
-      />
-
-      <div class="heroText">
-        <h1>{title}</h1>
-        <p>{description}</p>
-
-        <div class="row">
-          <a class="btn primary" href={email}>Contact</a>
-          <a class="btn" href="#work">Work</a>
-          <a class="btn" href="#reel">Reel</a>
-        </div>
-      </div>
-    </section>
-
-    <section id="reel" class="card section">
-      <h2>Reel</h2>
-
-      <div class="videoFrame">
-        <iframe
-          src="https://customer-nrvbnzpd60zikmrq.cloudflarestream.com/162147e40919e3608955bbb9f9e6e0bf/iframe?controls=true&preload=metadata&primaryColor=%23ffffff"
-          allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-          allowfullscreen
-          title="Justin Rosengarten — Reel"
-        ></iframe>
-      </div>
-    </section>
-
-    <section id="work" class="card section">
-      <h2>Selected Work</h2>
-      <ul>
-        <li><strong>The Earthwalker</strong> — short doc (2022–)</li>
-        <li><strong>The Flip</strong> — feature doc (editor)</li>
-        <li><strong>AFI Fest</strong> — technical ops / workflows</li>
-      </ul>
-    </section>
-
-    <div class="footer">© {new Date().getFullYear()} {title}</div>
-  </main>
+  <!-- Intentionally blank: background only -->
+  <main class="blank" aria-hidden="true"></main>
 </BaseLayout>
+
+<style>
+  .blank {
+    min-height: 100vh;
+  }
+</style>
