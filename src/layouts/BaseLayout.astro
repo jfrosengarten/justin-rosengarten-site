@@ -29,6 +29,7 @@ const {
   </head>
 
   <body>
+    <!-- Desktop header -->
     <header class="site-header">
       <div class="header-col identity-col">
         <a href="/" class="home-name">Justin Rosengarten</a>
@@ -54,96 +55,185 @@ const {
       <a href="/documentary" class="header-col nav-link">Documentary</a>
       <a href="/about" class="header-col nav-link">About</a>
     </header>
+
+    <!-- Mobile header -->
+    <div class="mobile-header">
+      <button class="menu-toggle" aria-expanded="false" aria-label="Toggle menu">
+        <span class="menu-text">Menu</span>
+        <span class="menu-icon">+</span>
+      </button>
+      <nav class="mobile-menu" aria-hidden="true">
+        <a href="/" class="mobile-menu-item">Home</a>
+        <a href="/social" class="mobile-menu-item">Social</a>
+        <a href="/branded" class="mobile-menu-item">Branded</a>
+        <a href="/documentary" class="mobile-menu-item">Documentary</a>
+        <a href="/about" class="mobile-menu-item">About</a>
+      </nav>
+    </div>
+
     <slot />
   </body>
 </html>
 
-<style>
-  .site-header {
-    position: fixed;
-    top: 20px;
-    left: 0;
-    right: 0;
-    display: flex;
-    gap: 10px;
-    padding: 0 32px;
-    z-index: 100;
-  }
+<script>
+  const toggle = document.querySelector('.menu-toggle') as HTMLButtonElement;
+  const menu = document.querySelector('.mobile-menu') as HTMLElement;
+  const icon = document.querySelector('.menu-icon') as HTMLElement;
 
-  .header-col {
-    flex: 1;
-    border-top: 1px solid rgba(255, 255, 255, 0.5);
-    padding: 8px 0 20px 0;
+  toggle?.addEventListener('click', () => {
+    const isOpen = toggle.getAttribute('aria-expanded') === 'true';
+    toggle.setAttribute('aria-expanded', String(!isOpen));
+    menu.setAttribute('aria-hidden', String(isOpen));
+    icon.textContent = isOpen ? '+' : '–';
+    menu.classList.toggle('is-open', !isOpen);
+  });
+</script>
+
+<style>
+  /* ── SHARED ── */
+  .mobile-header { display: none; }
+  .mobile-menu   { display: none; }
+
+  .mobile-menu.is-open {
     display: flex;
     flex-direction: column;
-    gap: 5px;
   }
 
-  .identity-col {
-    flex: 2;
+  /* ── DESKTOP (769px+) ── */
+  @media (min-width: 769px) {
+    .site-header {
+      position: fixed;
+      top: 20px;
+      left: 0;
+      right: 0;
+      display: flex;
+      gap: 10px;
+      padding: 0 32px;
+      z-index: 100;
+    }
+
+    .header-col {
+      flex: 1;
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 8px 0 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .identity-col { flex: 2; }
+
+    .home-name {
+      font-family: "novecento-slab-wide", serif;
+      font-weight: 800;
+      font-style: normal;
+      font-size: clamp(13px, 1.4vw, 18px);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.92);
+      white-space: nowrap;
+      transition: opacity 150ms ease;
+    }
+
+    .home-name:hover { opacity: 0.65; }
+
+    .home-email,
+    .home-location {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+
+    .home-email    { color: rgba(255, 255, 255, 0.45); }
+    .home-location { color: rgba(255, 255, 255, 0.35); }
+
+    .home-social {
+      display: flex;
+      gap: 12px;
+      margin-top: 2px;
+    }
+
+    .social-icon {
+      color: rgba(255, 255, 255, 0.4);
+      display: flex;
+      align-items: center;
+      transition: color 150ms ease;
+    }
+
+    .social-icon:hover { color: rgba(255, 255, 255, 0.85); }
+
+    .nav-link {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.55);
+      transition: color 150ms ease;
+    }
+
+    .nav-link:hover,
+    .nav-link.active { color: rgba(255, 255, 255, 0.92); }
   }
 
-  .home-name {
-    font-family: "novecento-slab-wide", serif;
-    font-weight: 800;
-    font-style: normal;
-    font-size: clamp(13px, 1.4vw, 18px);
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.92);
-    white-space: nowrap;
-    transition: opacity 150ms ease;
-  }
+  /* ── MOBILE (≤768px) ── */
+  @media (max-width: 768px) {
+    .site-header { display: none; }
 
-  .home-name:hover {
-    opacity: 0.65;
-  }
+    .mobile-header {
+      display: block;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+    }
 
-  .home-email,
-  .home-location {
-    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-    font-size: 12px;
-    font-weight: 400;
-    letter-spacing: 0.01em;
-  }
+    .menu-toggle {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: none;
+      border: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.5);
+      padding: 16px 20px;
+      cursor: pointer;
+      width: 100%;
+      text-align: left;
+    }
 
-  .home-email {
-    color: rgba(255, 255, 255, 0.45);
-  }
+    .menu-text {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.03em;
+    }
 
-  .home-location {
-    color: rgba(255, 255, 255, 0.35);
-  }
+    .menu-icon {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 18px;
+      font-weight: 300;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 1;
+    }
 
-  .home-social {
-    display: flex;
-    gap: 12px;
-    margin-top: 2px;
-  }
+    .mobile-menu-item {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 15px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.75);
+      letter-spacing: 0.03em;
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+      transition: color 150ms ease;
+    }
 
-  .social-icon {
-    color: rgba(255, 255, 255, 0.4);
-    display: flex;
-    align-items: center;
-    transition: color 150ms ease;
-  }
+    .mobile-menu-item:hover { color: rgba(255, 255, 255, 0.92); }
 
-  .social-icon:hover {
-    color: rgba(255, 255, 255, 0.85);
-  }
-
-  .nav-link {
-    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.55);
-    transition: color 150ms ease;
-  }
-
-  .nav-link:hover,
-  .nav-link.active {
-    color: rgba(255, 255, 255, 0.92);
+    .mobile-menu {
+      background: var(--bg);
+    }
   }
 </style>
