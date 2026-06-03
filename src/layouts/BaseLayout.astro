@@ -33,21 +33,26 @@ const {
     <header class="site-header">
       <div class="header-col identity-col">
         <a href="/" class="home-name">Justin Rosengarten</a>
-        <span class="home-email">justin.rosengarten@gmail.com</span>
-        <span class="home-location">New York, NY</span>
-        <div class="home-social">
-          <a href="https://www.instagram.com/justinrosengarten/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-              <circle cx="12" cy="12" r="4"/>
-              <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
-            </svg>
+        <div class="identity-info">
+          <a href="mailto:justin.rosengarten@gmail.com" class="contact-group">
+            <span class="contact-label">Contact</span>
+            <span class="home-email">justin.rosengarten@gmail.com</span>
           </a>
-          <a href="https://www.linkedin.com/in/justin-rosengarten/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-            </svg>
-          </a>
+          <span class="home-location">New York, NY</span>
+          <div class="home-social">
+            <a href="https://www.instagram.com/justinrosengarten/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+                <circle cx="12" cy="12" r="4"/>
+                <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor" stroke="none"/>
+              </svg>
+            </a>
+            <a href="https://www.linkedin.com/in/justin-rosengarten/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+            </a>
+          </div>
         </div>
       </div>
       <a href="/social" class="header-col nav-link">Social</a>
@@ -121,34 +126,72 @@ const {
       gap: 5px;
     }
 
-    .identity-col { flex: 1; }
+    .identity-col {
+      flex: 1;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 10px;
+    }
 
     .home-name {
       font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
       font-weight: 800;
-      font-size: clamp(13px, 1.4vw, 18px);
-      letter-spacing: 0.01em;
+      font-size: 14px;
+      letter-spacing: 0.12em;
       color: rgba(255, 255, 255, 0.92);
-      white-space: normal;
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      white-space: nowrap;
+      align-self: stretch;
       transition: opacity 150ms ease;
     }
 
     .home-name:hover { opacity: 0.65; }
 
+    .identity-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      padding-top: 2px;
+    }
+
+    .contact-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .contact-label {
+      font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+      font-size: 13px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+      color: rgba(255, 255, 255, 0.55);
+      transition: color 150ms ease;
+    }
+
+    .contact-group:hover .contact-label {
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .contact-group:hover .home-email {
+      color: rgba(255, 220, 80, 0.85);
+    }
+
     .home-email,
     .home-location {
       font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: 400;
       letter-spacing: 0.01em;
     }
 
-    .home-email    { color: rgba(255, 255, 255, 0.45); }
+    .home-email    { color: rgba(255, 255, 255, 0.45); transition: color 150ms ease; }
     .home-location { color: rgba(255, 255, 255, 0.35); }
 
     .home-social {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       margin-top: 2px;
     }
 
