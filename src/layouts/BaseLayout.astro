@@ -5,6 +5,7 @@ const {
   title = "Justin Rosengarten",
   description = "Personal site for Justin Rosengarten.",
   canonical = "https://justinrosengarten.com/",
+  ogImage,
 } = Astro.props;
 ---
 
@@ -22,9 +23,86 @@ const {
     <meta property="og:url" content={canonical} />
 
     <meta name="twitter:card" content="summary_large_image" />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    {ogImage && <meta name="twitter:image" content={ogImage} />}
+    <link rel="stylesheet" href="https://use.typekit.net/zto4gpp.css" />
   </head>
 
   <body>
+    <div class="home-header">
+      <a href="/" class="home-name">Justin Rosengarten</a>
+      <span class="home-title">Director & Editor</span>
+      <nav class="home-nav">
+        <a href="/social" class="nav-link">Social</a>
+        <a href="/branded" class="nav-link">Branded</a>
+        <a href="/documentary" class="nav-link">Documentary</a>
+        <a href="/about" class="nav-link">About</a>
+      </nav>
+    </div>
     <slot />
   </body>
 </html>
+
+<style>
+  .home-header {
+    position: fixed;
+    top: 48px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    z-index: 100;
+  }
+
+  .home-name {
+    font-family: "novecento-slab-wide", serif;
+    font-weight: 800;
+    font-style: normal;
+    font-size: clamp(17px, 2vw, 26px);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.92);
+    white-space: nowrap;
+    transition: opacity 150ms ease;
+  }
+
+  .home-name:hover {
+    opacity: 0.75;
+  }
+
+  .home-nav {
+    display: flex;
+    gap: 32px;
+    margin-top: 10px;
+  }
+
+  .nav-link {
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: clamp(11px, 1vw, 13px);
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.6);
+    padding-bottom: 3px;
+    border-bottom: 1px solid transparent;
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    color: rgba(255, 255, 255, 0.92);
+    border-bottom-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .home-title {
+    font-family: "novecento-slab", serif;
+    font-weight: 300;
+    font-style: normal;
+    font-size: clamp(12px, 1.3vw, 17px);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.75);
+  }
+</style>
