@@ -1,5 +1,5 @@
 :root {
-  --bg: #06080f;
+  --bg: #080612;
   --text: rgba(255, 255, 255, 0.94);
   --muted: rgba(255, 255, 255, 0.74);
   --card: rgba(255, 255, 255, 0.045);
@@ -26,17 +26,17 @@ body {
   text-rendering: optimizeLegibility;
   background: radial-gradient(
       900px 700px at 18% 8%,
-      rgba(86, 130, 255, 0.18),
+      rgba(100, 50, 200, 0.22),
       transparent 60%
     ),
     radial-gradient(
       900px 700px at 82% 12%,
-      rgba(255, 140, 90, 0.14),
+      rgba(150, 50, 180, 0.16),
       transparent 62%
     ),
     radial-gradient(
       1200px 900px at 50% 110%,
-      rgba(255, 255, 255, 0.06),
+      rgba(80, 20, 140, 0.12),
       transparent 55%
     ),
     var(--bg);
