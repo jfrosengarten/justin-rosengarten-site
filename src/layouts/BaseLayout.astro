@@ -76,79 +76,9 @@ const {
       </nav>
     </div>
 
-    <!-- Scroll-driven hero section -->
-    <div class="hero-about" id="heroAbout" aria-hidden="true">
-      <a href="/" class="hero-name" id="heroName">Justin Rosengarten</a>
-      <p class="hero-bio">
-        Documentary editor and director based in New York. I work with filmmakers and brands to build stories that feel true — in documentary, advertising, and everything in between.
-      </p>
-    </div>
-
     <slot />
   </body>
 </html>
-
-<script>
-  // Scroll-driven animation
-  const headerCols = document.querySelectorAll<HTMLElement>('.header-col');
-  const heroAbout  = document.getElementById('heroAbout')!;
-  const heroName   = document.getElementById('heroName')!;
-  const heroBio    = heroAbout.querySelector<HTMLElement>('.hero-bio')!;
-
-  const SCROLL_START = 60;
-  const SCROLL_END   = 650;
-
-  let currentP = 0;
-  let targetP  = 0;
-  let rafId    = 0;
-
-  function lerp(a: number, b: number, t: number) { return a + (b - a) * t; }
-  function clamp01(v: number) { return Math.min(1, Math.max(0, v)); }
-  function ease(t: number) { return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t; }
-
-  function applyFrame(p: number) {
-    const ep = ease(p);
-
-    // Header columns fade up
-    headerCols.forEach(col => {
-      col.style.opacity   = String(clamp01(1 - p * 1.4));
-      col.style.transform = `translateY(${-ep * 16}px)`;
-    });
-
-    // Hero name: rotate clockwise -90 → 0, settle into position
-    heroName.style.opacity   = String(clamp01(p * 1.8));
-    heroName.style.transform = `translateY(${lerp(200, 80, ep)}px) rotate(${lerp(-90, 0, ep)}deg)`;
-    heroAbout.style.pointerEvents = p > 0.92 ? 'auto' : 'none';
-
-    // Bio fades in after name is nearly horizontal
-    const bioP = clamp01((ep - 0.7) / 0.3);
-    heroBio.style.opacity   = String(bioP);
-    heroBio.style.transform = `translateY(${lerp(14, 0, bioP)}px)`;
-  }
-
-  function tick() {
-    currentP += (targetP - currentP) * 0.07;
-    applyFrame(currentP);
-    if (Math.abs(targetP - currentP) > 0.0005) {
-      rafId = requestAnimationFrame(tick);
-    }
-  }
-
-  window.addEventListener('scroll', () => {
-    targetP = clamp01((window.scrollY - SCROLL_START) / (SCROLL_END - SCROLL_START));
-    cancelAnimationFrame(rafId);
-    rafId = requestAnimationFrame(tick);
-  }, { passive: true });
-
-  applyFrame(0);
-
-  // Match bio width to rendered name width
-  function syncBioWidth() {
-    heroBio.style.width = heroName.offsetWidth + 'px';
-  }
-  syncBioWidth();
-  window.addEventListener('resize', syncBioWidth);
-</script>
 
 <script>
   const toggle = document.querySelector('.menu-toggle') as HTMLButtonElement;
@@ -286,46 +216,6 @@ const {
 
     .nav-link:hover,
     .nav-link.active { color: rgba(255, 255, 255, 0.92); }
-  }
-
-  /* ── HERO SCROLL SECTION ── */
-  .hero-about {
-    position: fixed;
-    top: 0;
-    left: 80px;
-    right: 80px;
-    z-index: 40;
-    pointer-events: none;
-  }
-
-  .hero-name {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: block;
-    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-    font-weight: 800;
-    font-size: clamp(32px, 5vw, 64px);
-    letter-spacing: -0.02em;
-    color: rgba(255, 255, 255, 0.92);
-    white-space: nowrap;
-    transform-origin: left center;
-    will-change: transform, opacity;
-    opacity: 0;
-  }
-
-  .hero-bio {
-    position: absolute;
-    top: 175px;
-    left: 0;
-    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
-    font-size: 15px;
-    font-weight: 300;
-    line-height: 1.7;
-    color: rgba(255, 255, 255, 0.6);
-    text-align: justify;
-    opacity: 0;
-    will-change: transform, opacity;
   }
 
   /* ── MOBILE (≤768px) ── */
