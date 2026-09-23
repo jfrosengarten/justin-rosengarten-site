@@ -1,0 +1,99 @@
+---
+interface Props {
+  mp4: string;
+  webm?: string;
+  poster: string;
+  href: string;
+  title: string;
+}
+
+const { mp4, webm, poster, href, title } = Astro.props;
+---
+
+<a class="vc" href={href} aria-label={`Watch ${title}`}>
+  <img class="vc-poster" src={poster} alt="" />
+  <video class="vc-video" muted loop playsinline preload="none">
+    <source src={mp4} type="video/mp4" />
+    {webm && <source src={webm} type="video/webm" />}
+  </video>
+  <div class="vc-play" aria-hidden="true">
+    <svg viewBox="0 0 80 80" fill="none">
+      <circle cx="40" cy="40" r="39" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
+      <path d="M33 27l22 13-22 13V27z" fill="white"/>
+    </svg>
+  </div>
+</a>
+
+<script>
+  function initVideoCards() {
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    document.querySelectorAll<HTMLAnchorElement>('.vc').forEach(card => {
+      const video = card.querySelector<HTMLVideoElement>('.vc-video');
+      if (!video || reducedMotion) return;
+
+      card.addEventListener('mouseenter', () => { video.play(); });
+      card.addEventListener('mouseleave', () => { video.pause(); video.currentTime = 0; });
+    });
+  }
+
+  document.addEventListener('astro:page-load', initVideoCards);
+  initVideoCards();
+</script>
+
+<style>
+  .vc {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #07030f;
+    cursor: pointer;
+  }
+
+  .vc-poster,
+  .vc-video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border: none;
+  }
+
+  .vc-video {
+    opacity: 0;
+    transition: opacity 300ms ease;
+  }
+
+  .vc:hover .vc-video {
+    opacity: 1;
+  }
+
+  .vc-play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 200ms ease;
+  }
+
+  .vc-play svg {
+    width: 56px;
+    height: 56px;
+    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.7));
+    transition: transform 160ms ease;
+  }
+
+  .vc:hover .vc-play {
+    opacity: 1;
+  }
+
+  .vc:hover .vc-play svg {
+    transform: scale(1.06);
+  }
+</style>

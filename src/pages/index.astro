@@ -1,120 +1,38 @@
 ---
-const title = "Justin Rosengarten";
-const description = "Documentary editor. Systems-minded. Story-first.";
+import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
-    <link rel="canonical" href="https://justinrosengarten.com/" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://justinrosengarten.com/" />
-    <meta name="twitter:card" content="summary_large_image" />
-    <link rel="stylesheet" href="https://use.typekit.net/zto4gpp.css" />
-  </head>
-  <body>
-    <div class="page">
-      <div class="content">
-        <h1 class="name">Justin<br />Rosengarten</h1>
-        <p class="eyebrow">Site under construction</p>
-        <a href="mailto:justin.rosengarten@gmail.com" class="contact">
-          justin.rosengarten@gmail.com
-        </a>
-      </div>
-      <div class="corner corner-tl"></div>
-      <div class="corner corner-tr"></div>
-      <div class="corner corner-bl"></div>
-      <div class="corner corner-br"></div>
-    </div>
-  </body>
-</html>
+<BaseLayout
+  title="Justin Rosengarten"
+  description="Documentary editor. Systems-minded. Story-first."
+  canonical="https://justinrosengarten.com/"
+>
+  <section class="hero">
+    <video autoplay muted loop playsinline preload="auto" class="hero-video">
+      <source src="/Motion%20Thumbs/YARBROUGH-WEDDING_MOTION-THUMB.mp4" type="video/mp4" />
+    </video>
+  </section>
+</BaseLayout>
 
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-  html, body {
-    height: 100%;
-    background: #07030f;
-    color: rgba(255, 255, 255, 0.92);
-    font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
+  :global(body) {
+    overflow-x: hidden;
   }
 
-  a { color: inherit; text-decoration: none; }
-
-  .page {
-    min-height: 100dvh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 60px 32px;
+  .hero {
     position: relative;
+    width: 100vw;
+    height: 100dvh;
+    overflow: hidden;
   }
 
-  .content {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    max-width: 560px;
-    width: 100%;
-  }
-
-  .eyebrow {
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: rgba(255, 255, 255, 0.58);
-  }
-
-  .name {
-    font-size: clamp(52px, 10vw, 96px);
-    font-weight: 800;
-    line-height: 0.95;
-    letter-spacing: -0.03em;
-    color: rgba(255, 255, 255, 0.94);
-  }
-
-  .contact {
-    display: inline-block;
-    margin-top: 12px;
-    font-size: 13px;
-    font-weight: 400;
-    letter-spacing: 0.02em;
-    color: rgba(255, 255, 255, 0.38);
-    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-    padding-bottom: 2px;
-    transition: color 150ms ease, border-color 150ms ease;
-    width: fit-content;
-  }
-
-  .contact:hover {
-    color: rgba(255, 255, 255, 0.78);
-    border-color: rgba(255, 255, 255, 0.35);
-  }
-
-  .corner {
+  .hero-video {
     position: absolute;
-    width: 16px;
-    height: 16px;
-  }
-
-  .corner-tl { top: 24px; left: 24px; border-top: 1px solid rgba(255,255,255,0.2); border-left: 1px solid rgba(255,255,255,0.2); }
-  .corner-tr { top: 24px; right: 24px; border-top: 1px solid rgba(255,255,255,0.2); border-right: 1px solid rgba(255,255,255,0.2); }
-  .corner-bl { bottom: 24px; left: 24px; border-bottom: 1px solid rgba(255,255,255,0.2); border-left: 1px solid rgba(255,255,255,0.2); }
-  .corner-br { bottom: 24px; right: 24px; border-bottom: 1px solid rgba(255,255,255,0.2); border-right: 1px solid rgba(255,255,255,0.2); }
-
-  @media (max-width: 480px) {
-    .corner { width: 12px; height: 12px; }
-    .corner-tl, .corner-tr { top: 16px; }
-    .corner-bl, .corner-br { bottom: 16px; }
-    .corner-tl, .corner-bl { left: 16px; }
-    .corner-tr, .corner-br { right: 16px; }
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
   }
 </style>

@@ -1,0 +1,53 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const streamUid = "db381f3618a1a96926a4ca24ef8f75ed";
+const customerCode = "nrvbnzpd60zikmrq";
+const iframeSrc = `https://customer-${customerCode}.cloudflarestream.com/${streamUid}/iframe?autoplay=true&muted=false`;
+---
+
+<BaseLayout
+  title="Chulengo — Justin Rosengarten"
+  description="Chulengo, edited by Justin Rosengarten."
+  canonical="https://justinrosengarten.com/chulengo"
+>
+  <main class="main">
+    <div class="player-wrap">
+      <iframe
+        src={iframeSrc}
+        allow="autoplay; fullscreen; picture-in-picture"
+        allowfullscreen
+        class="player"
+        title="Chulengo"
+      ></iframe>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .main {
+    padding-top: 88px;
+  }
+
+  .player-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    background: #000;
+  }
+
+  .player {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+  }
+
+  @media (max-width: 768px) {
+    .main {
+      padding-top: 60px;
+    }
+  }
+</style>
