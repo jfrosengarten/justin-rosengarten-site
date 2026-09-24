@@ -141,9 +141,16 @@ const {
       left: 0;
       right: 0;
       display: flex;
+      align-items: flex-start;
       gap: 10px;
       padding: 0 32px;
       z-index: 100;
+      /* Let hovers/clicks pass through the header's empty space to content below */
+      pointer-events: none;
+    }
+
+    .site-header a {
+      pointer-events: auto;
     }
 
     .header-col {

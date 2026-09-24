@@ -1,5 +1,7 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import VideoCard from "../components/VideoCard.astro";
+import { projects } from "../data/projects";
 ---
 
 <BaseLayout
@@ -11,6 +13,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     <video autoplay muted loop playsinline preload="auto" class="hero-video">
       <source src="/Motion%20Thumbs/YARBROUGH-WEDDING_MOTION-THUMB.mp4" type="video/mp4" />
     </video>
+  </section>
+
+  <section class="work" aria-label="Work">
+    <div class="grid">
+      {projects.map((p) => <VideoCard {...p} />)}
+    </div>
   </section>
 </BaseLayout>
 
@@ -34,5 +42,31 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  .work {
+    padding: 32px;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 4px;
+  }
+
+  @media (max-width: 900px) {
+    .grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .work {
+      padding: 16px;
+    }
+
+    .grid {
+      grid-template-columns: 1fr;
+    }
   }
 </style>

@@ -1,6 +1,10 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import VideoCard from "../components/VideoCard.astro";
+import { projects } from "../data/projects";
+
+const TOTAL_SLOTS = 10;
+const placeholderCount = Math.max(0, TOTAL_SLOTS - projects.length);
 ---
 
 <BaseLayout
@@ -10,39 +14,10 @@ import VideoCard from "../components/VideoCard.astro";
 >
   <main class="main">
     <div class="grid">
-      {Array.from({ length: 5 }).map(() => (
+      {Array.from({ length: placeholderCount }).map(() => (
         <div class="placeholder" aria-hidden="true" />
       ))}
-      <VideoCard
-        mp4="/Motion%20Thumbs/BAKING_MOTION-THUMB.mp4"
-        poster="https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/f57ac85a-07f9-46a9-c923-3dddf8455500/public"
-        href="/baking"
-        title="Baking"
-      />
-      <VideoCard
-        mp4="/Motion%20Thumbs/CHULENGO-MOTION-THUMB.mp4"
-        poster="https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/89bff98a-948b-48f6-c67e-cea1242c1800/public"
-        href="/chulengo"
-        title="Chulengo"
-      />
-      <VideoCard
-        mp4="/Motion%20Thumbs/AWAY-WHERE%20-%20MOTION-THUMB.mp4"
-        poster="https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/4a97ae56-ed77-40b1-1491-241d8b558700/public"
-        href="/away-where"
-        title="Away Where"
-      />
-      <VideoCard
-        mp4="/Motion%20Thumbs/YARBROUGH-WEDDING_MOTION-THUMB.mp4"
-        poster="/Thumbnails/yarbrough-wedding_07.webp"
-        href="/yarbrough-wedding"
-        title="Yarbrough Wedding"
-      />
-      <VideoCard
-        mp4="/Motion%20Thumbs/ALSO-TRUE_MOTION-THUMB.mp4"
-        poster="https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/6ea46e89-8244-431b-5586-037832455900/public"
-        href="/also-true"
-        title="Also True"
-      />
+      {projects.map((p) => <VideoCard {...p} />)}
     </div>
   </main>
 </BaseLayout>
