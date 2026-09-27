@@ -1,0 +1,253 @@
+---
+/**
+ * A press article shown in a pop-up reader. Any link with
+ * data-press-open="<id>" opens it (the link's own href, usually the PDF,
+ * still works without JavaScript). Close with the ✕, Escape, or a click
+ * outside the article.
+ */
+interface Props {
+  id: string;
+  title: string;
+  byline: string;
+  pdf: string;
+  /** Page images, top to bottom */
+  pages: { src: string; width: number; height: number }[];
+}
+
+const { id, title, byline, pdf, pages } = Astro.props;
+---
+
+<dialog class="press" id={id} aria-label={title}>
+  <div class="press-panel">
+    <header class="press-bar">
+      <div class="press-meta">
+        <p class="press-label">Press</p>
+        <p class="press-title">{title}</p>
+        <p class="press-byline">{byline}</p>
+      </div>
+      <div class="press-actions">
+        <a class="press-pdf" href={pdf} target="_blank" rel="noopener noreferrer">
+          Open PDF <span aria-hidden="true">↗</span>
+        </a>
+        <button class="press-close" type="button" aria-label="Close article">
+          <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+            <path d="M5 5l14 14M19 5L5 19" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="press-pages">
+      {pages.map((page, i) => (
+        <img
+          src={page.src}
+          width={page.width}
+          height={page.height}
+          alt={i === 0 ? `${title}, page ${i + 1} of ${pages.length}` : `Page ${i + 1} of ${pages.length}`}
+          loading={i === 0 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      ))}
+    </div>
+  </div>
+</dialog>
+
+<script>
+  document.querySelectorAll<HTMLDialogElement>("dialog.press").forEach((dialog) => {
+    const openers = document.querySelectorAll<HTMLAnchorElement>(`[data-press-open="${dialog.id}"]`);
+    const panel = dialog.querySelector<HTMLElement>(".press-panel")!;
+
+    const close = () => dialog.close();
+
+    openers.forEach((link) =>
+      link.addEventListener("click", (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey) return; // let modified clicks open the PDF
+        e.preventDefault();
+        panel.scrollTop = 0;
+        dialog.showModal();
+        document.documentElement.classList.add("press-open");
+      })
+    );
+
+    dialog.querySelector(".press-close")!.addEventListener("click", close);
+
+    // A click on the dimmed backdrop (outside the panel) closes it
+    dialog.addEventListener("click", (e) => {
+      if (!panel.contains(e.target as Node)) close();
+    });
+
+    dialog.addEventListener("close", () => {
+      document.documentElement.classList.remove("press-open");
+    });
+  });
+</script>
+
+<style>
+  :global(html.press-open) {
+    overflow: hidden;
+  }
+
+  .press {
+    width: 100%;
+    height: 100%;
+    max-width: none;
+    max-height: none;
+    margin: 0;
+    padding: 24px 16px;
+    border: none;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .press::backdrop {
+    background: rgba(7, 3, 15, 0.82);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+  }
+
+  .press[open] {
+    display: flex;
+    justify-content: center;
+    animation: press-fade 220ms ease;
+  }
+
+  .press[open] .press-panel {
+    animation: press-rise 320ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .press-panel {
+    position: relative;
+    width: 100%;
+    max-width: 820px;
+    height: 100%;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    border-radius: 4px;
+    background: #fff;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+  }
+
+  .press-bar {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 14px 16px 14px 20px;
+    background: rgba(7, 3, 15, 0.94);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+  }
+
+  .press-meta {
+    min-width: 0;
+  }
+
+  .press-label {
+    margin: 0 0 4px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .press-title {
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.3;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .press-byline {
+    margin: 2px 0 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .press-actions {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    flex-shrink: 0;
+  }
+
+  .press-pdf {
+    font-size: 12px;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.6);
+    transition: color 150ms ease;
+  }
+
+  .press-pdf:hover {
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  .press-close {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.85);
+    cursor: pointer;
+    transition: color 150ms ease, border-color 150ms ease, transform 200ms ease;
+  }
+
+  .press-close:hover {
+    color: rgba(255, 220, 80, 0.9);
+    border-color: rgba(255, 220, 80, 0.6);
+    transform: rotate(90deg);
+  }
+
+  .press-close:focus-visible,
+  .press-pdf:focus-visible {
+    outline: 1px solid rgba(255, 220, 80, 0.6);
+    outline-offset: 3px;
+  }
+
+  .press-pages img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  @keyframes press-fade {
+    from { opacity: 0; }
+  }
+
+  @keyframes press-rise {
+    from { opacity: 0; transform: translateY(12px); }
+  }
+
+  @media (max-width: 600px) {
+    .press {
+      padding: 0;
+    }
+
+    .press-panel {
+      border-radius: 0;
+    }
+
+    .press-pdf {
+      display: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .press[open],
+    .press[open] .press-panel {
+      animation: none;
+    }
+
+    .press-close:hover {
+      transform: none;
+    }
+  }
+</style>

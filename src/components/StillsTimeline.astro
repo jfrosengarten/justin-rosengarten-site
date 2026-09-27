@@ -1,0 +1,380 @@
+---
+/**
+ * A hero image with an editing-timeline strip beneath it. Hovering or dragging
+ * across the strip "skims" through the stills like scrubbing footage; clicking
+ * a clip keeps it up; leaving the strip returns to the kept clip.
+ */
+export interface Still {
+  src: string;
+  alt: string;
+  /** Vertical shots: show the whole image over a blurred copy instead of cropping */
+  vertical?: boolean;
+}
+
+interface Props {
+  stills: Still[];
+}
+
+const { stills } = Astro.props;
+
+// Each clip is treated as 5 seconds on a 24fps timeline for the timecode readout
+const CLIP_SECONDS = 5;
+const pad = (n: number) => String(n).padStart(2, "0");
+// Thin out labels as clips are added: at most ~10 on desktop, ~5 on phones
+const desktopStep = Math.ceil(stills.length / 10);
+const mobileStep = Math.ceil(stills.length / 5);
+const rulerMarks = Array.from({ length: stills.length + 1 }, (_, i) => {
+  const s = i * CLIP_SECONDS;
+  return {
+    label: `${pad(Math.floor(s / 60))}:${pad(s % 60)}`,
+    left: (i / stills.length) * 100,
+    desktop: i % desktopStep === 0,
+    mobile: i % mobileStep === 0,
+  };
+}).filter((mark) => mark.desktop || mark.mobile);
+---
+
+<figure class="stills" data-clip-seconds={CLIP_SECONDS}>
+  <div class="stills-frame">
+    {stills.map((still, i) => (
+      <div class:list={["stills-slide", { "is-active": i === 0, "is-vertical": still.vertical }]}>
+        {still.vertical && (
+          <img class="stills-backdrop" src={still.src} alt="" aria-hidden="true" loading="lazy" decoding="async" />
+        )}
+        <img
+          class="stills-img"
+          src={still.src}
+          alt={still.alt}
+          loading={i === 0 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </div>
+    ))}
+  </div>
+
+  <figcaption class="stills-readout" aria-live="polite">
+    <span class="stills-count">
+      <span class="stills-index">01</span> / {pad(stills.length)}
+    </span>
+    <span class="stills-timecode">00:00:00:00</span>
+  </figcaption>
+
+  <div class="timeline">
+    <div class="timeline-ruler" aria-hidden="true">
+      {rulerMarks.map((mark) => (
+        <span
+          class:list={["ruler-mark", { "desktop-hidden": !mark.desktop, "mobile-hidden": !mark.mobile }]}
+          style={`left: ${mark.left}%`}
+        >
+          {mark.label}
+        </span>
+      ))}
+    </div>
+    <div class="timeline-track">
+      <span class="timeline-label" aria-hidden="true">V1</span>
+      <div class="timeline-clips" role="group" aria-label="Behind-the-scenes stills">
+        {stills.map((still, i) => (
+          <button
+            type="button"
+            class:list={["clip", { "is-kept": i === 0 }]}
+            data-index={i}
+            aria-label={`Show still ${i + 1} of ${stills.length}: ${still.alt}`}
+            aria-pressed={i === 0 ? "true" : "false"}
+          >
+            <img src={still.src} alt="" loading="lazy" decoding="async" />
+          </button>
+        ))}
+        <span class="playhead" aria-hidden="true"></span>
+      </div>
+    </div>
+  </div>
+</figure>
+
+<script>
+  const pad = (n: number) => String(Math.floor(n)).padStart(2, "0");
+
+  document.querySelectorAll<HTMLElement>(".stills").forEach((root) => {
+    const slides = [...root.querySelectorAll<HTMLElement>(".stills-slide")];
+    const clips = [...root.querySelectorAll<HTMLButtonElement>(".clip")];
+    const strip = root.querySelector<HTMLElement>(".timeline-clips")!;
+    const playhead = root.querySelector<HTMLElement>(".playhead")!;
+    const indexEl = root.querySelector<HTMLElement>(".stills-index")!;
+    const timecodeEl = root.querySelector<HTMLElement>(".stills-timecode")!;
+    const clipSeconds = Number(root.dataset.clipSeconds) || 5;
+    const count = slides.length;
+    let kept = 0;
+    let shown = -1;
+
+    const setTimecode = (fraction: number) => {
+      const totalFrames = Math.round(fraction * count * clipSeconds * 24);
+      const frames = totalFrames % 24;
+      const secs = Math.floor(totalFrames / 24);
+      timecodeEl.textContent = `00:${pad(secs / 60)}:${pad(secs % 60)}:${pad(frames)}`;
+    };
+
+    const movePlayhead = (fraction: number) => {
+      playhead.style.left = `${Math.min(Math.max(fraction, 0), 1) * 100}%`;
+      setTimecode(Math.min(Math.max(fraction, 0), 0.9999));
+    };
+
+    const show = (i: number) => {
+      if (i === shown) return;
+      shown = i;
+      slides.forEach((slide, j) => slide.classList.toggle("is-active", j === i));
+      clips.forEach((clip, j) => clip.classList.toggle("is-current", j === i));
+      indexEl.textContent = pad(i + 1);
+    };
+
+    const keep = (i: number) => {
+      kept = i;
+      clips.forEach((clip, j) => {
+        clip.classList.toggle("is-kept", j === i);
+        clip.setAttribute("aria-pressed", String(j === i));
+      });
+      show(i);
+      movePlayhead((i + 0.5) / count);
+    };
+
+    const fractionAt = (clientX: number) => {
+      const rect = strip.getBoundingClientRect();
+      return (clientX - rect.left) / rect.width;
+    };
+
+    const scrubTo = (clientX: number) => {
+      const f = Math.min(Math.max(fractionAt(clientX), 0), 0.9999);
+      movePlayhead(f);
+      show(Math.floor(f * count));
+    };
+
+    strip.addEventListener("pointermove", (e) => scrubTo(e.clientX));
+    strip.addEventListener("pointerdown", (e) => {
+      scrubTo(e.clientX);
+      if (e.pointerType !== "mouse") strip.setPointerCapture(e.pointerId);
+    });
+    strip.addEventListener("pointerup", (e) => {
+      keep(Math.floor(Math.min(Math.max(fractionAt(e.clientX), 0), 0.9999) * count));
+    });
+    strip.addEventListener("pointerleave", () => keep(kept));
+
+    clips.forEach((clip, i) => {
+      clip.addEventListener("keydown", (e) => {
+        const next = e.key === "ArrowRight" ? i + 1 : e.key === "ArrowLeft" ? i - 1 : null;
+        if (next === null) return;
+        e.preventDefault();
+        const target = (next + count) % count;
+        keep(target);
+        clips[target].focus();
+      });
+      // Also covers keyboard activation (Enter/Space)
+      clip.addEventListener("click", () => keep(i));
+    });
+
+    keep(0);
+  });
+</script>
+
+<style>
+  .stills {
+    margin: 0;
+  }
+
+  .stills-frame {
+    position: relative;
+    aspect-ratio: 1143 / 768;
+    overflow: hidden;
+    border-radius: 4px;
+    background: #000;
+  }
+
+  .stills-slide {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: opacity 120ms linear;
+  }
+
+  .stills-slide.is-active {
+    opacity: 1;
+  }
+
+  .stills-img,
+  .stills-backdrop {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .is-vertical .stills-img {
+    object-fit: contain;
+  }
+
+  .stills-backdrop {
+    filter: blur(24px) brightness(0.45);
+    transform: scale(1.35);
+  }
+
+  .stills-readout {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-variant-numeric: tabular-nums;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .stills-index {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .stills-timecode {
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  .timeline {
+    margin-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+    padding-top: 6px;
+  }
+
+  .timeline-ruler {
+    position: relative;
+    height: 11px;
+    margin-left: 32px;
+    font-size: 9px;
+    letter-spacing: 0.06em;
+    font-variant-numeric: tabular-nums;
+    color: rgba(255, 255, 255, 0.3);
+    background-image: repeating-linear-gradient(
+      to right,
+      rgba(255, 255, 255, 0.18) 0 1px,
+      transparent 1px 8px
+    );
+    background-size: 100% 4px;
+    background-repeat: no-repeat;
+    background-position: bottom;
+    padding-bottom: 8px;
+  }
+
+  .ruler-mark {
+    position: absolute;
+    top: 0;
+    line-height: 1;
+    transform: translateX(-50%);
+  }
+
+  .ruler-mark:first-child {
+    transform: none;
+  }
+
+  .ruler-mark:last-child {
+    transform: translateX(-100%);
+  }
+
+  @media (min-width: 601px) {
+    .desktop-hidden {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .mobile-hidden {
+      display: none;
+    }
+  }
+
+  .timeline-track {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-top: 4px;
+  }
+
+  .timeline-label {
+    flex: 0 0 32px;
+    display: flex;
+    align-items: center;
+    font-size: 9px;
+    letter-spacing: 0.12em;
+    color: rgba(255, 255, 255, 0.35);
+  }
+
+  .timeline-clips {
+    position: relative;
+    flex: 1;
+    display: flex;
+    gap: 2px;
+    height: 44px;
+    cursor: ew-resize;
+    touch-action: pan-y;
+  }
+
+  .clip {
+    flex: 1;
+    min-width: 0;
+    padding: 0;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 2px;
+    background: #000;
+    overflow: hidden;
+    cursor: inherit;
+    opacity: 0.45;
+    transition: opacity 120ms linear, border-color 120ms linear;
+  }
+
+  .clip img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .clip.is-current,
+  .clip.is-kept {
+    opacity: 1;
+  }
+
+  .clip.is-kept {
+    border-color: rgba(255, 255, 255, 0.6);
+  }
+
+  .clip:focus-visible {
+    outline: 1px solid rgba(255, 220, 80, 0.85);
+    outline-offset: 2px;
+  }
+
+  .playhead {
+    position: absolute;
+    top: -6px;
+    bottom: -4px;
+    width: 1px;
+    background: rgba(255, 220, 80, 0.85);
+    transform: translateX(-50%);
+    pointer-events: none;
+    transition: left 60ms linear;
+  }
+
+  .playhead::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 7px;
+    height: 7px;
+    background: rgba(255, 220, 80, 0.85);
+    transform: translate(-50%, -2px) rotate(45deg);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .stills-slide,
+    .clip,
+    .playhead {
+      transition: none;
+    }
+  }
+</style>

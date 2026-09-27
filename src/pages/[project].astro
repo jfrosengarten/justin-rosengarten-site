@@ -1,0 +1,321 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { projects, type Project } from "../data/projects";
+
+export function getStaticPaths() {
+  return projects.map((project) => ({
+    params: { project: project.slug },
+    props: { project },
+  }));
+}
+
+const { project } = Astro.props as { project: Project };
+
+const streamBase = "https://customer-nrvbnzpd60zikmrq.cloudflarestream.com";
+// The main player opens on the same still used for the project's grid tile
+const videos = project.streamUid
+  ? [{ streamUid: project.streamUid, poster: project.poster }, ...(project.extraVideos ?? [])]
+  : [];
+const iframeSrc = (video: { streamUid: string; poster: string }) =>
+  streamBase + "/" + video.streamUid + "/iframe?poster=" + encodeURIComponent(video.poster);
+
+// Paragraphs split on blank lines; [text](url) inside a paragraph becomes a link
+const LINK = /\[([^\]]+)\]\(([^)\s]+)\)/g;
+const blurbParagraphs = (project.blurb ?? "")
+  .split(/\n\s*\n/)
+  .map((para) => para.trim())
+  .filter(Boolean)
+  .map((para) => {
+    const parts: ({ text: string } | { text: string; href: string })[] = [];
+    let last = 0;
+    for (const m of para.matchAll(LINK)) {
+      if (m.index! > last) parts.push({ text: para.slice(last, m.index) });
+      parts.push({ text: m[1], href: m[2] });
+      last = m.index! + m[0].length;
+    }
+    if (last < para.length) parts.push({ text: para.slice(last) });
+    return parts;
+  });
+---
+
+<BaseLayout
+  title={`${project.title} — Justin Rosengarten`}
+  description={project.description ?? `${project.title}, edited by Justin Rosengarten.`}
+  canonical={`https://justinrosengarten.com/${project.slug}`}
+>
+  <main class="main">
+    <div class="players">
+      {videos.length > 0 ? (
+        videos.map((video, i) => (
+          <div class="player-wrap">
+            <iframe
+              src={iframeSrc(video)}
+              allow="accelerometer; gyroscope; autoplay; encrypted-media; fullscreen; picture-in-picture"
+              allowfullscreen
+              class="player"
+              title={videos.length > 1 ? `${project.title} (${i + 1} of ${videos.length})` : project.title}
+            ></iframe>
+          </div>
+        ))
+      ) : (
+        <div class="player-wrap">
+          <img src={project.poster} alt={project.title} class="player" />
+        </div>
+      )}
+    </div>
+
+    <section class="info">
+      <div class="info-meta">
+        <h1 class="info-title">{project.title}</h1>
+        {project.credits && project.credits.length > 0 && (
+          <div class="credits">
+            {project.credits.map((c) => (
+              <p class="credit">
+                {c.role}{" "}
+                {("people" in c ? c.people : [c]).map((person, i) => (
+                  <>
+                    {i > 0 && <span class="credit-name"> & </span>}
+                    {person.url ? (
+                      <a class="credit-name credit-link" href={person.url} target="_blank" rel="noopener noreferrer">{person.name}</a>
+                    ) : (
+                      <span class="credit-name">{person.name}</span>
+                    )}
+                  </>
+                ))}
+              </p>
+            ))}
+          </div>
+        )}
+        {(project.year || project.format || project.length) && (
+          <dl class="specs">
+            {project.year && (
+              <div class="spec">
+                <dt>Year</dt>
+                <dd>{project.year}</dd>
+              </div>
+            )}
+            {project.format && (
+              <div class="spec">
+                <dt>Format</dt>
+                <dd>{project.format}</dd>
+              </div>
+            )}
+            {project.length && (
+              <div class="spec">
+                <dt>Length</dt>
+                <dd>{project.length}</dd>
+              </div>
+            )}
+          </dl>
+        )}
+        {project.link && (
+          <div class="project-link">
+            <p class="project-link-label">{project.link.label}</p>
+            <a href={project.link.url} target="_blank" rel="noopener noreferrer">
+              {project.link.url.replace(/^https?:\/\/(www\.)?/, "").replace(/\/$/, "")}
+              <span aria-hidden="true"> ↗</span>
+            </a>
+          </div>
+        )}
+      </div>
+
+      {blurbParagraphs.length > 0 && (
+        <div class="info-blurb">
+          <p class="info-label">Synopsis</p>
+          {project.tagline && <p class="info-tagline">{project.tagline}</p>}
+          {blurbParagraphs.map((parts) => (
+            <p>
+              {parts.map((part) =>
+                "href" in part ? (
+                  part.href.startsWith("/") ? (
+                    <a class="blurb-link" href={part.href}>{part.text}</a>
+                  ) : (
+                    <a class="blurb-link" href={part.href} target="_blank" rel="noopener noreferrer">{part.text}</a>
+                  )
+                ) : (
+                  part.text
+                )
+              )}
+            </p>
+          ))}
+        </div>
+      )}
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .main {
+    padding-top: 88px;
+  }
+
+  .players {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .player-wrap {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    width: 100%;
+    background: #000;
+  }
+
+  .player {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
+    display: block;
+    object-fit: cover;
+  }
+
+  .info {
+    display: grid;
+    grid-template-columns: 5fr 7fr;
+    gap: 48px;
+    margin: 32px 32px 0;
+    padding-top: 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+  }
+
+  .info-title {
+    margin: 16px 0 0;
+    font-size: clamp(24px, 2.4vw, 34px);
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .credits {
+    margin-top: 12px;
+  }
+
+  .credit {
+    margin: 0;
+    font-size: 14px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .credit-name {
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .credit-link {
+    transition: color 150ms ease;
+  }
+
+  .credit-link:hover {
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  .specs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px 40px;
+    margin: 28px 0 0;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .spec dt {
+    margin: 0 0 6px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .spec dd {
+    margin: 0;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .project-link {
+    margin-top: 20px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .project-link-label {
+    margin: 0 0 6px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .project-link a {
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 150ms ease;
+  }
+
+  .project-link a:hover {
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  .info-blurb {
+    padding-top: 20px;
+    max-width: 38em;
+  }
+
+  .info-blurb p {
+    margin: 0 0 18px;
+    font-size: 16px;
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.72);
+  }
+
+  .info-blurb .info-tagline {
+    margin: 0 0 14px;
+    font-size: 20px;
+    line-height: 1.35;
+    letter-spacing: -0.005em;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  /* Linked names stay on one line */
+  .blurb-link {
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+
+  .blurb-link:hover {
+    color: rgba(255, 220, 80, 0.85);
+    border-color: rgba(255, 220, 80, 0.5);
+  }
+
+  .info-blurb .info-label {
+    margin: 0 0 12px;
+    font-size: 10px;
+    line-height: 1.5;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  @media (max-width: 900px) {
+    .info {
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .main {
+      padding-top: 60px;
+    }
+
+    .info {
+      margin: 24px 16px 0;
+    }
+  }
+</style>

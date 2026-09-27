@@ -1,0 +1,244 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import StillsTimeline from "../components/StillsTimeline.astro";
+import PressModal from "../components/PressModal.astro";
+
+// First still is the hero; the rest are behind-the-scenes shots
+const stills = [
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/65aff853-0fbd-45af-0aad-eedd7319b800/public",
+    alt: "Justin Rosengarten",
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/5077edc5-1a8f-44ea-0522-f6e36d917100/public",
+    alt: "Justin filming with a cinema camera in tall grass in the mountains",
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/b80f48a3-afa1-474a-4608-03d4c894fa00/public",
+    alt: "Justin holding a camera on a snowy slope beside a subject in snowshoes",
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/713ae4d4-06ee-4bf6-5fe4-8f2508f63a00/public",
+    alt: "Two people at a mixing desk in front of a screen showing The Earthwalker",
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/2c90b5db-94e0-430e-a202-930477d32300/public",
+    alt: "Justin setting up a camera and lights in a living room",
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/ccef23bc-819f-44da-dd6c-1e0a40802100/public",
+    alt: "A crew filming in a flowering garden on a sunny day",
+    vertical: true,
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/4744d8bc-c28b-48dc-5999-64e2c16bd100/public",
+    alt: "Justin watching a monitor on a snowy mountain shoot",
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/882b9525-9ead-4e5e-308e-560ae473b500/public",
+    alt: "Justin with a rigged cinema camera on a snowfield at sunset",
+    vertical: true,
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/f6dc0b0d-1abf-4341-e5b3-184a1079d900/public",
+    alt: "Two crew members kneeling in the snow framing a shot in the fog",
+    vertical: true,
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/872b29c2-1819-4e6e-b565-f38d761d1c00/public",
+    alt: "Justin standing at a lakeshore holding camera gear, mountains behind",
+  },
+  {
+    src: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/d60c5798-e6e9-4ea8-31c7-a6b2a1d60d00/public",
+    alt: "Two hikers with packs below a rocky cliff face",
+  },
+];
+---
+
+<BaseLayout
+  title="About — Justin Rosengarten"
+  description="Justin Rosengarten is a New York–based documentary director and editor making original films and branded storytelling."
+  canonical="https://justinrosengarten.com/about"
+>
+  <main class="about">
+    <StillsTimeline stills={stills} />
+
+    <div class="copy">
+      <p class="label">About</p>
+
+      <p class="lede">
+        Justin Rosengarten is a <span class="nowrap">New York–based</span> documentary
+        director and editor making original films and branded storytelling.
+      </p>
+
+      <div class="body">
+        <p>
+          A graduate of the Rhode Island School of Design, he came back to film
+          after a ten-year career in kitchens — including
+          <a
+            class="inline-link"
+            href="/Press/Union%20Square%20Cafes%20Secret%20Weapon.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            data-press-open="press-usc"
+          >a stint as the first-ever head bread baker at Union Square Cafe</a>, Danny
+          Meyer's flagship and the birthplace of modern hospitality.
+        </p>
+        <p>
+          The connection is craft: a dedication to process, patience, and paying
+          attention — whether that's a fermenting loaf of sourdough or a
+          marinating pile of footage. Across both, the goal is to capture and
+          develop fleeting things, thoughts, and emotions&nbsp;… and present them
+          whole.
+        </p>
+        <p>
+          His short doc <a class="inline-link" href="/the-earthwalker"><em>The Earthwalker</em></a> is out now.
+        </p>
+      </div>
+
+      <div class="details">
+        <div class="detail">
+          <p class="label">Credits</p>
+          <ul>
+            <li>Director</li>
+            <li>Documentary Editor</li>
+          </ul>
+        </div>
+
+        <div class="detail">
+          <p class="label">Contact</p>
+          <ul>
+            <li><a href="mailto:justin.rosengarten@gmail.com">justin.rosengarten@gmail.com</a></li>
+            <li>New York, NY</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <PressModal
+    id="press-usc"
+    title="Union Square Cafe's Secret Weapon"
+    byline="Noah Rothbaum · February 22, 2017"
+    pdf="/Press/Union%20Square%20Cafes%20Secret%20Weapon.pdf"
+    pages={[
+      { src: "/Press/union-square-cafe/page-1.jpg", width: 1600, height: 1268 },
+      { src: "/Press/union-square-cafe/page-2.jpg", width: 1600, height: 1708 },
+      { src: "/Press/union-square-cafe/page-3.jpg", width: 1600, height: 2099 },
+      { src: "/Press/union-square-cafe/page-4.jpg", width: 1600, height: 2185 },
+      { src: "/Press/union-square-cafe/page-5.jpg", width: 1600, height: 2726 },
+      { src: "/Press/union-square-cafe/page-6.jpg", width: 1600, height: 2698 },
+    ]}
+  />
+</BaseLayout>
+
+<style>
+  .about {
+    display: grid;
+    grid-template-columns: 7fr 5fr;
+    gap: 48px;
+    align-items: start;
+    padding: 88px 32px 64px;
+  }
+
+  .copy {
+    border-top: 1px solid rgba(255, 255, 255, 0.5);
+    padding-top: 8px;
+  }
+
+  .label {
+    margin: 0 0 12px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .lede {
+    margin: 24px 0 0;
+    font-size: clamp(22px, 2.2vw, 30px);
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.92);
+    max-width: 28ch;
+  }
+
+  .body {
+    margin-top: 28px;
+    max-width: 52ch;
+  }
+
+  .body p {
+    margin: 0 0 16px;
+    font-size: 14px;
+    line-height: 1.65;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .nowrap {
+    white-space: nowrap;
+  }
+
+  .inline-link {
+    color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+
+  .inline-link:hover {
+    color: rgba(255, 220, 80, 0.85);
+    border-color: rgba(255, 220, 80, 0.5);
+  }
+
+  .details {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) max-content;
+    gap: 24px;
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+
+  .details ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .details li {
+    font-size: 12px;
+    line-height: 1.8;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .details a {
+    transition: color 150ms ease;
+  }
+
+  .details a:hover {
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  @media (max-width: 900px) {
+    .about {
+      grid-template-columns: 1fr;
+      gap: 32px;
+    }
+
+    .lede {
+      max-width: none;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .about {
+      padding: 68px 16px 48px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .details {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

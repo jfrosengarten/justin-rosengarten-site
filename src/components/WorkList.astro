@@ -1,0 +1,173 @@
+---
+/**
+ * Chronological index of projects, newest first, with each year shown once
+ * at the start of its group. On hover the title slides right, a rule draws
+ * out and the project's category fades in beside it. Touch screens show the
+ * categories outright.
+ */
+import { projects } from "../data/projects";
+
+interface Props {
+  /** Current page path, used to mark the project being viewed */
+  currentPath?: string;
+}
+
+const { currentPath } = Astro.props;
+
+// Newest first; projects without a year yet sit at the top in their listed order
+const byYear = [...projects].sort((a, b) => {
+  if (!a.year || !b.year) return (a.year ? 1 : 0) - (b.year ? 1 : 0);
+  return Number(b.year) - Number(a.year);
+});
+const rows = byYear.map((project, i) => ({
+  project,
+  newYear: i === 0 || project.year !== byYear[i - 1].year,
+}));
+---
+
+<ol class="work-list">
+  {rows.map(({ project: p, newYear }) => (
+    <li class:list={{ "year-start": newYear }}>
+      <a
+        class="work-row"
+        href={`/${p.slug}`}
+        aria-current={currentPath === `/${p.slug}` ? "page" : undefined}
+      >
+        <span class:list={["work-year", { "is-repeat": !newYear }]}>{p.year}</span>
+        <span class="work-title">{p.title}</span>
+        {p.category && (
+          <>
+            <span class="work-rule" aria-hidden="true"></span>
+            <span class="work-cat">{p.category}</span>
+          </>
+        )}
+      </a>
+    </li>
+  ))}
+</ol>
+
+<style>
+  .work-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .work-list li + li {
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .work-list li + li.year-start {
+    border-top-color: rgba(255, 255, 255, 0.16);
+  }
+
+  .work-row {
+    display: flex;
+    align-items: baseline;
+    padding: 9px 0;
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.75);
+  }
+
+  .work-year {
+    flex: 0 0 44px;
+    font-size: 10px;
+    letter-spacing: 0.08em;
+    font-variant-numeric: tabular-nums;
+    color: rgba(255, 255, 255, 0.3);
+    transition: color 250ms ease, opacity 250ms ease;
+  }
+
+  .work-title {
+    white-space: nowrap;
+    transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1), color 200ms ease;
+  }
+
+  .work-rule {
+    align-self: center;
+    flex: 0 0 20px;
+    height: 1px;
+    margin-left: 22px;
+    background: rgba(255, 220, 80, 0.6);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .work-cat {
+    margin-left: 10px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+    color: rgba(255, 255, 255, 0.55);
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity 250ms ease, transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .work-row:focus-visible {
+    outline: 1px solid rgba(255, 220, 80, 0.5);
+    outline-offset: 2px;
+  }
+
+  /* Within a year only the first row shows it; the rest reveal it on hover */
+  .work-year.is-repeat {
+    opacity: 0;
+  }
+
+  .work-row:hover .work-year.is-repeat,
+  .work-row:focus-visible .work-year.is-repeat {
+    opacity: 1;
+  }
+
+  .work-row[aria-current="page"] .work-year,
+  .work-row[aria-current="page"] .work-title {
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  .work-row:hover .work-title,
+  .work-row:focus-visible .work-title {
+    transform: translateX(12px);
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  .work-row:hover .work-year,
+  .work-row:focus-visible .work-year {
+    color: rgba(255, 220, 80, 0.85);
+  }
+
+  .work-row:hover .work-rule,
+  .work-row:focus-visible .work-rule {
+    transform: scaleX(1);
+    transition-delay: 60ms;
+  }
+
+  .work-row:hover .work-cat,
+  .work-row:focus-visible .work-cat {
+    opacity: 1;
+    transform: translateX(12px);
+    transition-delay: 160ms;
+  }
+
+  /* Touch screens can't hover: show the categories outright */
+  @media (hover: none) {
+    .work-rule {
+      transform: scaleX(1);
+    }
+
+    .work-cat {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .work-title,
+    .work-rule,
+    .work-cat {
+      transition: none;
+    }
+  }
+</style>

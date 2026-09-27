@@ -22,3 +22,6 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# source video masters (too large for git; convert to .mp4 for the site)
+public/**/*.mov

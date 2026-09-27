@@ -1,0 +1,62 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Page not found — Justin Rosengarten"
+  description="This page doesn't exist."
+  canonical="https://justinrosengarten.com/404"
+>
+  <main class="not-found">
+    <p class="label">404</p>
+    <h1 class="heading">This page doesn't exist.</h1>
+    <p class="hint">
+      Try one of the projects below, or head <a href="/">home</a>.
+    </p>
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    padding: 160px 32px 48px;
+  }
+
+  .label {
+    margin: 0 0 16px;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .heading {
+    margin: 0;
+    font-size: clamp(24px, 2.4vw, 34px);
+    font-weight: 400;
+    line-height: 1.15;
+    color: rgba(255, 255, 255, 0.92);
+  }
+
+  .hint {
+    margin: 16px 0 0;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.6);
+  }
+
+  .hint a {
+    color: rgba(255, 255, 255, 0.85);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+    transition: color 150ms ease, border-color 150ms ease;
+  }
+
+  .hint a:hover {
+    color: rgba(255, 220, 80, 0.85);
+    border-color: rgba(255, 220, 80, 0.5);
+  }
+
+  @media (max-width: 768px) {
+    .not-found {
+      padding: 100px 16px 32px;
+    }
+  }
+</style>
