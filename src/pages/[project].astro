@@ -13,9 +13,12 @@ export function getStaticPaths() {
 const { project } = Astro.props as { project: Project };
 
 const streamBase = "https://customer-nrvbnzpd60zikmrq.cloudflarestream.com";
-// The main player opens on the same still used for the project's grid tile
+// The main player opens on the grid tile's still unless the project sets playerPoster
 const videos = project.streamUid
-  ? [{ streamUid: project.streamUid, poster: project.poster }, ...(project.extraVideos ?? [])]
+  ? [
+      { streamUid: project.streamUid, poster: project.playerPoster ?? project.poster },
+      ...(project.extraVideos ?? []),
+    ]
   : [];
 const iframeSrc = (video: { streamUid: string; poster: string }) =>
   streamBase + "/" + video.streamUid + "/iframe?poster=" + encodeURIComponent(video.poster);
@@ -47,7 +50,11 @@ const blurbParagraphs = (project.blurb ?? "")
   <main class="main">
     {project.gallery ? (
       <div class="gallery-wrap">
-        <StillsGallery title={project.title} stills={project.gallery} />
+        <StillsGallery
+          title={project.title}
+          stills={project.gallery}
+          videoSrc={videos[0] && iframeSrc(videos[0])}
+        />
       </div>
     ) : (
       <div class="players">

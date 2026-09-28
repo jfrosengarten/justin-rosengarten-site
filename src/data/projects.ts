@@ -20,7 +20,9 @@ export interface Project {
   poster: string;
   /** Cloudflare Stream video ID; without one the page shows the poster still */
   streamUid?: string;
-  /** Stills shown in place of a video; base paths with -960.jpg / -1920.jpg versions */
+  /** Poster for the page's own player, when it should differ from the grid tile's */
+  playerPoster?: string;
+  /** Stills grid; with a streamUid the video leads it. Base paths with -960.jpg / -1920.jpg versions */
   gallery?: string[];
   /** More videos shown on the same page, below the main one */
   extraVideos?: Video[];
@@ -186,8 +188,11 @@ The most recent project we made together is the documentary short [The Earthwalk
     title: "Midnight Bagel",
     slug: "midnight-bagel",
     category: "Branded Storytelling",
-    gallery: Array.from({ length: 20 }, (_, i) =>
-      `/Stills/midnight-bagel/${String(i + 1).padStart(2, "0")}`
+    streamUid: "d8b389e1be4216ca9883b81e1e23a853",
+    playerPoster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/18b591b5-d2e2-491e-bff3-62ed0c28c300/public",
+    // The video leads the grid (in place of still 15); stills follow in this order
+    gallery: ["13", "14", "16", "17", "18", "19", "20", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"].map(
+      (n) => `/Stills/midnight-bagel/${n}`
     ),
     mp4: "/Motion%20Thumbs/BAKING_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/f57ac85a-07f9-46a9-c923-3dddf8455500/public",

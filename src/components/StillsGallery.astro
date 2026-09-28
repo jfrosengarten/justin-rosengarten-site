@@ -9,9 +9,11 @@ interface Props {
   title: string;
   /** Base paths; each has "-960.jpg" and "-1920.jpg" versions */
   stills: string[];
+  /** Optional video player URL shown in the first (large) slot */
+  videoSrc?: string;
 }
 
-const { title, stills } = Astro.props;
+const { title, stills, videoSrc } = Astro.props;
 
 // Placement within one 6-column, 6-row cycle: [column, colSpan, rowOffset, rowSpan]
 const CYCLE: [number, number, number, number][] = [
@@ -27,11 +29,17 @@ const CYCLE: [number, number, number, number][] = [
   [4, 3, 5, 1], // half
 ];
 
-const tiles = stills.map((base, i) => {
+// The video, when there is one, takes the first slot; stills follow in order
+const items: ({ video: string } | { base: string; stillIndex: number })[] = [
+  ...(videoSrc ? [{ video: videoSrc }] : []),
+  ...stills.map((base, stillIndex) => ({ base, stillIndex })),
+];
+
+const tiles = items.map((item, i) => {
   const [col, colSpan, rowOffset, rowSpan] = CYCLE[i % CYCLE.length];
   const row = Math.floor(i / CYCLE.length) * 6 + rowOffset + 1;
   return {
-    base,
+    item,
     style: `--col: ${col} / span ${colSpan}; --row: ${row} / span ${rowSpan}; --m: ${i % 3 === 0 ? 2 : 1};`,
     large: colSpan === 4,
   };
@@ -39,26 +47,37 @@ const tiles = stills.map((base, i) => {
 ---
 
 <section class="gallery" aria-label={`${title} stills`}>
-  {tiles.map((tile, i) => (
-    <button
-      type="button"
-      class:list={["gallery-tile", { "is-large": tile.large }]}
-      style={tile.style}
-      data-index={i}
-      aria-label={`View still ${i + 1} of ${stills.length}`}
-    >
-      <img
-        src={`${tile.base}-960.jpg`}
-        srcset={`${tile.base}-960.jpg 960w, ${tile.base}-1920.jpg 1920w`}
-        sizes={tile.large ? "(max-width: 700px) 100vw, 66vw" : "(max-width: 700px) 50vw, 33vw"}
-        alt=""
-        width="960"
-        height="540"
-        loading={i < 3 ? "eager" : "lazy"}
-        decoding="async"
-      />
-    </button>
-  ))}
+  {tiles.map(({ item, style, large }, i) =>
+    "video" in item ? (
+      <div class="gallery-tile gallery-video" style={style}>
+        <iframe
+          src={item.video}
+          allow="accelerometer; gyroscope; autoplay; encrypted-media; fullscreen; picture-in-picture"
+          allowfullscreen
+          title={title}
+        ></iframe>
+      </div>
+    ) : (
+      <button
+        type="button"
+        class:list={["gallery-tile", { "is-large": large }]}
+        style={style}
+        data-index={item.stillIndex}
+        aria-label={`View still ${item.stillIndex + 1} of ${stills.length}`}
+      >
+        <img
+          src={`${item.base}-960.jpg`}
+          srcset={`${item.base}-960.jpg 960w, ${item.base}-1920.jpg 1920w`}
+          sizes={large ? "(max-width: 700px) 100vw, 66vw" : "(max-width: 700px) 50vw, 33vw"}
+          alt=""
+          width="960"
+          height="540"
+          loading={i < 3 ? "eager" : "lazy"}
+          decoding="async"
+        />
+      </button>
+    )
+  )}
 </section>
 
 <dialog class="viewer" aria-label={`${title} stills`}>
@@ -149,6 +168,19 @@ const tiles = stills.map((base, i) => {
     aspect-ratio: 16 / 9;
     object-fit: cover;
     transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1), filter 300ms ease;
+  }
+
+  .gallery-video {
+    aspect-ratio: 16 / 9;
+    cursor: default;
+  }
+
+  .gallery-video iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
   }
 
   .gallery-tile:hover img {
