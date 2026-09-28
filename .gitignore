@@ -25,3 +25,6 @@ pnpm-debug.log*
 
 # source video masters (too large for git; convert to .mp4 for the site)
 public/**/*.mov
+
+# 4K source stills (web-sized copies live in public/Stills)
+public/Thumbnails/Baking/

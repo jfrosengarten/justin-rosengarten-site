@@ -20,6 +20,8 @@ export interface Project {
   poster: string;
   /** Cloudflare Stream video ID; without one the page shows the poster still */
   streamUid?: string;
+  /** Stills shown in place of a video; base paths with -960.jpg / -1920.jpg versions */
+  gallery?: string[];
   /** More videos shown on the same page, below the main one */
   extraVideos?: Video[];
   description?: string;
@@ -184,7 +186,9 @@ The most recent project we made together is the documentary short [The Earthwalk
     title: "Midnight Bagel",
     slug: "midnight-bagel",
     category: "Branded Storytelling",
-    streamUid: "d8b389e1be4216ca9883b81e1e23a853",
+    gallery: Array.from({ length: 20 }, (_, i) =>
+      `/Stills/midnight-bagel/${String(i + 1).padStart(2, "0")}`
+    ),
     mp4: "/Motion%20Thumbs/BAKING_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/f57ac85a-07f9-46a9-c923-3dddf8455500/public",
     year: "2021",

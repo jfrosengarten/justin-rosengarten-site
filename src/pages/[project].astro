@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import StillsGallery from "../components/StillsGallery.astro";
 import { projects, type Project } from "../data/projects";
 
 export function getStaticPaths() {
@@ -44,25 +45,31 @@ const blurbParagraphs = (project.blurb ?? "")
   canonical={`https://justinrosengarten.com/${project.slug}`}
 >
   <main class="main">
-    <div class="players">
-      {videos.length > 0 ? (
-        videos.map((video, i) => (
+    {project.gallery ? (
+      <div class="gallery-wrap">
+        <StillsGallery title={project.title} stills={project.gallery} />
+      </div>
+    ) : (
+      <div class="players">
+        {videos.length > 0 ? (
+          videos.map((video, i) => (
+            <div class="player-wrap">
+              <iframe
+                src={iframeSrc(video)}
+                allow="accelerometer; gyroscope; autoplay; encrypted-media; fullscreen; picture-in-picture"
+                allowfullscreen
+                class="player"
+                title={videos.length > 1 ? `${project.title} (${i + 1} of ${videos.length})` : project.title}
+              ></iframe>
+            </div>
+          ))
+        ) : (
           <div class="player-wrap">
-            <iframe
-              src={iframeSrc(video)}
-              allow="accelerometer; gyroscope; autoplay; encrypted-media; fullscreen; picture-in-picture"
-              allowfullscreen
-              class="player"
-              title={videos.length > 1 ? `${project.title} (${i + 1} of ${videos.length})` : project.title}
-            ></iframe>
+            <img src={project.poster} alt={project.title} class="player" />
           </div>
-        ))
-      ) : (
-        <div class="player-wrap">
-          <img src={project.poster} alt={project.title} class="player" />
-        </div>
-      )}
-    </div>
+        )}
+      </div>
+    )}
 
     <section class="info">
       <div class="info-meta">
@@ -147,6 +154,10 @@ const blurbParagraphs = (project.blurb ?? "")
 <style>
   .main {
     padding-top: 100px;
+  }
+
+  .gallery-wrap {
+    padding: 0 32px;
   }
 
   .players {
@@ -312,6 +323,10 @@ const blurbParagraphs = (project.blurb ?? "")
   @media (max-width: 768px) {
     .main {
       padding-top: 60px;
+    }
+
+    .gallery-wrap {
+      padding: 0 16px;
     }
 
     .info {
