@@ -5,22 +5,22 @@ interface Props {
   poster: string;
   href: string;
   title: string;
+  /** Justin's role, shown under the title on hover */
+  role?: string;
 }
 
-const { mp4, webm, poster, href, title } = Astro.props;
+const { mp4, webm, poster, href, title, role } = Astro.props;
 ---
 
-<a class="vc" href={href} aria-label={`Watch ${title}`}>
+<a class="vc" href={href} aria-label={role ? `Watch ${title}, ${role}` : `Watch ${title}`}>
   <img class="vc-poster" src={poster} alt="" />
   <video class="vc-video" muted loop playsinline preload="none">
     <source src={mp4} type="video/mp4" />
     {webm && <source src={webm} type="video/webm" />}
   </video>
-  <div class="vc-play" aria-hidden="true">
-    <svg viewBox="0 0 80 80" fill="none">
-      <circle cx="40" cy="40" r="39" stroke="rgba(255,255,255,0.35)" stroke-width="1"/>
-      <path d="M33 27l22 13-22 13V27z" fill="white"/>
-    </svg>
+  <div class="vc-caption" aria-hidden="true">
+    <span class="vc-title">{title}</span>
+    {role && <span class="vc-role">{role}</span>}
   </div>
 </a>
 
@@ -72,28 +72,77 @@ const { mp4, webm, poster, href, title } = Astro.props;
     opacity: 1;
   }
 
-  .vc-play {
+  /* Caption: a soft fade from the bottom, then title and role rise into place */
+  .vc::after {
+    content: "";
     position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    inset: 40% 0 0 0;
+    background: linear-gradient(to top, rgba(7, 3, 15, 0.8), rgba(7, 3, 15, 0));
     opacity: 0;
-    transition: opacity 200ms ease;
+    transition: opacity 300ms ease;
+    pointer-events: none;
   }
 
-  .vc-play svg {
-    width: 56px;
-    height: 56px;
-    filter: drop-shadow(0 2px 12px rgba(0, 0, 0, 0.7));
-    transition: transform 160ms ease;
+  .vc-caption {
+    position: absolute;
+    left: 14px;
+    right: 14px;
+    bottom: 12px;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: opacity 300ms ease, transform 400ms cubic-bezier(0.22, 1, 0.36, 1);
+    pointer-events: none;
   }
 
-  .vc:hover .vc-play {
+  .vc-title {
+    font-size: 14px;
+    line-height: 1.2;
+    color: rgba(255, 255, 255, 0.96);
+  }
+
+  .vc-role {
+    font-size: 9px;
+    line-height: 1.3;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .vc:hover::after,
+  .vc:focus-visible::after,
+  .vc:hover .vc-caption,
+  .vc:focus-visible .vc-caption {
     opacity: 1;
   }
 
-  .vc:hover .vc-play svg {
-    transform: scale(1.06);
+  .vc:hover .vc-caption,
+  .vc:focus-visible .vc-caption {
+    transform: none;
+    transition-delay: 60ms;
+  }
+
+  .vc:focus-visible {
+    outline: 1px solid rgba(255, 220, 80, 0.7);
+    outline-offset: 2px;
+  }
+
+  /* Touch screens can't hover: keep the caption visible */
+  @media (hover: none) {
+    .vc::after,
+    .vc-caption {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .vc-caption {
+      transform: none;
+      transition: opacity 300ms ease;
+    }
   }
 </style>

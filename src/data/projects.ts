@@ -27,8 +27,8 @@ export interface Project {
   /** More videos shown on the same page, below the main one */
   extraVideos?: Video[];
   description?: string;
-  /** Type of work, e.g. "Short Doc", shown on the About page's Selected Work list */
-  category?: string;
+  /** Justin's role on the project, e.g. "Director / Editor"; shown in the Selected Work list */
+  role?: string;
   /** Year of release, e.g. "2010" */
   year?: string;
   /** What it was shot on, e.g. "Super 16mm" */
@@ -52,7 +52,7 @@ export const projects: Project[] = [
     title: "The Earthwalker",
     slug: "the-earthwalker",
     streamUid: "b293d331f0b8237f76c56511697339cb",
-    category: "Original Film",
+    role: "Director / Editor",
     mp4: "/Motion%20Thumbs/EW_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/5c659604-844f-48bb-85c6-a5032cae8500/public",
     year: "2026",
@@ -75,7 +75,7 @@ This film took me to the ends of the Earth — again — and stands as an energe
   {
     title: "National Forest Foundation",
     slug: "national-forest-foundation",
-    category: "Branded Storytelling",
+    role: "Producer / Editor",
     streamUid: "fe2c4f7d1112b7bb42bbfff253fe6756",
     extraVideos: [
       {
@@ -116,7 +116,7 @@ The real challenge was maintaining visual continuity across four very different 
   {
     title: "The Law",
     slug: "the-law",
-    category: "Branded Storytelling",
+    role: "Camera Operator",
     mp4: "/Motion%20Thumbs/THE-LAW_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/ba180138-e3bc-4c68-a95f-4828a855d800/public",
     year: "2023",
@@ -146,7 +146,7 @@ The final work was never completed, but the images persist — a testament to Ja
   {
     title: "Search Nurture",
     slug: "search-nurture",
-    category: "Branded Storytelling",
+    role: "Director / Cinematographer",
     streamUid: "293461f1a59c8a982c8f5d6e5050e7c1",
     mp4: "/Motion%20Thumbs/SEARCH-NURTURE_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/8252cbcb-0866-4fb7-544d-fa985a32c300/public",
@@ -158,7 +158,7 @@ The final work was never completed, but the images persist — a testament to Ja
     ],
     blurb: `Search Nurture is a San Francisco marketing company founded by Spencer Padway.
 
-Spencer hired me to produce a series of videos about his company's distinctive culture — fully remote, with unlimited PTO and a mental-health-first approach to leadership.
+Spencer hired me to direct and shoot a series of videos about his company's distinctive culture — fully remote, with unlimited PTO and a mental-health-first approach to leadership.
 
 Spencer and I produced the video together, shot across four states in seven days — a real lesson in building and maintaining visual consistency across different cultural contexts and natural lighting conditions.
 
@@ -167,7 +167,7 @@ The result captures Spencer's forward-thinking philosophy, told from his perspec
   {
     title: "Music Composed By",
     slug: "music-composed-by",
-    category: "Branded Storytelling",
+    role: "Director / Editor",
     streamUid: "c20c521723d7a0f9812c1258ad03402f",
     mp4: "/Motion%20Thumbs/COMPOSED-BY_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/8564afcb-2eff-4b84-131a-626a7ffb8e00/public",
@@ -180,14 +180,14 @@ The result captures Spencer's forward-thinking philosophy, told from his perspec
     ],
     blurb: `Music Composed By is a glimpse into the mind and talent of composer [Shaun Finnegan](https://www.consolomusic.com/). Shaun has been writing music his entire life, and his genius — my words, not his — lies in a rare mix of deep competency and open curiosity, a constant, gentle pursuit of knowledge that gives his music its emotion and resonance.
 
-I've had the privilege of working with Shaun for most of my artistic career; his music touches nearly everything I've ever made. I was honored to produce and edit this short about him.
+I've had the privilege of working with Shaun for most of my artistic career; his music touches nearly everything I've ever made. I was honored to direct and edit this short about him.
 
 The most recent project we made together is the documentary short [The Earthwalker](/the-earthwalker) — out now, and pulsing with a score only Shaun could have written.`,
   },
   {
     title: "Midnight Bagel",
     slug: "midnight-bagel",
-    category: "Branded Storytelling",
+    role: "Director / Cinematographer",
     streamUid: "d8b389e1be4216ca9883b81e1e23a853",
     playerPoster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/18b591b5-d2e2-491e-bff3-62ed0c28c300/public",
     // The video leads the grid (in place of still 15); stills follow in this order
@@ -215,7 +215,7 @@ What remains is a series of images that pay homage to the San Francisco baking s
   {
     title: "In and for the Wild",
     slug: "chulengo",
-    category: "Branded Storytelling",
+    role: "Director / Cinematographer",
     streamUid: "db381f3618a1a96926a4ca24ef8f75ed",
     mp4: "/Motion%20Thumbs/CHULENGO_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/cfba874b-0ba0-4072-9469-031671902b00/public",
@@ -237,7 +237,7 @@ This trip is what led me back to film a year later — deepening the interest th
   {
     title: "Away Where?",
     slug: "away-where",
-    category: "Original Film",
+    role: "Director / Editor",
     streamUid: "aaa83723deb3de245542dd53a03bd3e2",
     mp4: "/Motion%20Thumbs/AWAY-WHERE_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/4a97ae56-ed77-40b1-1491-241d8b558700/public",
@@ -253,59 +253,5 @@ This trip is what led me back to film a year later — deepening the interest th
 The competition challenges filmmakers to take complex ideas from scientific literature and communicate them to a general audience through the language of cinema.
 
 Justin's film placed third. It's built entirely from public-domain found footage sourced from the Internet Archive — an approach of translating abstract ideas into visual metaphor that has shaped his style ever since.`,
-  },
-  {
-    title: "Yarbrough Wedding",
-    slug: "yarbrough-wedding",
-    category: "Original Film",
-    description: "Yarbrough Wedding film by Justin Rosengarten.",
-    year: "2010",
-    format: "Super 16mm",
-    length: "1:25",
-    credits: [
-      { role: "Directed & Shot by", name: "Justin Rosengarten" },
-    ],
-    blurb: `In early fall of 2010, Justin was asked by a dear friend to shoot his wedding in Vermont, on Super 16mm film. His enthusiasm at being asked completely clouded the fact that his experience shooting on film was, at that point, extremely limited — and the stakes couldn't have been higher…
-
-This would only happen once, and he had to capture it.
-
-And so he did…
-
-The result is a single ten-minute roll of film, full of life and love.
-
-The relief that washed over Justin at the lab, watching the transfer to QC it, was the equivalent of a thousand sneezes all at once — a release of pure, full-body tension. Not only that the film was properly exposed, but that he'd actually captured something meaningful for his friends.
-
-It was the first of many spirited, somewhat naive adventures in filmmaking, and it set the tone for the projects that followed.
-
-Leap before you look. The greater the risk, he learned, the greater the reward.`,
-    streamUid: "a16f43a031018d26013ca4ec9797c73f",
-    mp4: "/Motion%20Thumbs/YARBROUGH-WEDDING_MOTION-THUMB.mp4",
-    poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/e269ec89-9b88-4e70-017a-c047e5565800/public",
-  },
-  {
-    title: "Also True",
-    slug: "also-true",
-    category: "Original Film",
-    streamUid: "8826154ff256ddaae0d2ca94e1873129",
-    mp4: "/Motion%20Thumbs/ALSO-TRUE_MOTION-THUMB.mp4",
-    poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/9109eaa8-7623-469f-3498-d9ec1a82e100/public",
-    year: "2009",
-    format: "Super 16mm",
-    length: "12:30",
-    credits: [
-      { role: "Directed & Shot by", name: "Justin Rosengarten" },
-      { role: "Music Composed by", name: "Shaun Finnegan", url: "https://www.consolomusic.com/" },
-    ],
-    blurb: `In the summer of 2007, Justin got the news that his mother's breast cancer had returned, and that she had six months to live. So he picked up a Bolex and started filming — following her to chemotherapy appointments and through the ordinary moments of her days, as she went on living.
-
-It became an effort to document her last months and, at the same time, to hold onto and process what he was feeling.
-
-Also True is Justin's first film: a personal essay and short documentary, largely without structure — a pure reaction and a show of instinct rather than anything premeditated.
-
-The result is ominous, honest, and, as the title says, also true.
-
-Justin's mother passed away a few months after the film premiered. Now it stands as a potent artifact of her energy.
-
-Making it taught Justin lessons he's still developing: above all, that point of view and personal intent are the two nonnegotiables, in art and in life — and that films are capsules of meaning, preserved in amber for as long as they exist.`,
   },
 ];

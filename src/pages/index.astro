@@ -3,8 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 ---
 
 <BaseLayout
-  title="Justin Rosengarten"
-  description="Documentary editor. Systems-minded. Story-first."
+  title="Justin Rosengarten — Documentary Director & Editor, New York"
+  description="Justin Rosengarten is a New York–based documentary director and editor making original films and branded storytelling."
   canonical="https://justinrosengarten.com/"
 >
   <section class="hero">
@@ -19,6 +19,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     >
       <source src="/Motion%20Thumbs/HERO-REEL_MOTION-THUMB.mp4" type="video/mp4" />
     </video>
+
+    <div class="hero-caption">
+      <h1 class="hero-title">
+        <span class="hero-name">Justin Rosengarten</span>
+        <span class="hero-role">Documentary Director &amp; Editor, New York</span>
+      </h1>
+    </div>
   </section>
 </BaseLayout>
 
@@ -42,5 +49,58 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* Dark fade from the bottom keeps the headline readable over bright footage */
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 45%;
+    background: linear-gradient(to top, rgba(7, 3, 15, 0.78), rgba(7, 3, 15, 0));
+    pointer-events: none;
+  }
+
+  .hero-caption {
+    position: absolute;
+    left: 32px;
+    right: 32px;
+    bottom: 40px;
+    z-index: 1;
+  }
+
+  .hero-title {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-weight: 400;
+    text-shadow: 0 1px 16px rgba(0, 0, 0, 0.35);
+  }
+
+  .hero-name {
+    font-size: clamp(34px, 5.2vw, 72px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: rgba(255, 255, 255, 0.96);
+  }
+
+  .hero-role {
+    font-size: clamp(14px, 1.4vw, 19px);
+    line-height: 1.35;
+    letter-spacing: 0.01em;
+    color: rgba(255, 255, 255, 0.82);
+  }
+
+  @media (max-width: 768px) {
+    .hero-caption {
+      left: 16px;
+      right: 16px;
+      bottom: 28px;
+    }
+
+    .hero-title {
+      gap: 8px;
+    }
   }
 </style>

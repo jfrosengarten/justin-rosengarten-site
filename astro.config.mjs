@@ -7,5 +7,8 @@ export default defineConfig({
   integrations: [sitemap()],
   redirects: {
     '/work': '/',
+    // Retired project pages
+    '/also-true': '/',
+    '/yarbrough-wedding': '/',
   },
 });

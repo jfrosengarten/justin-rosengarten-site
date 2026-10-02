@@ -2,8 +2,8 @@
 /**
  * Chronological index of projects, newest first, with each year shown once
  * at the start of its group. On hover the title slides right, a rule draws
- * out and the project's category fades in beside it. Touch screens show the
- * categories outright.
+ * out and Justin's role on the project fades in beside it. Touch screens show
+ * the roles outright.
  */
 import { projects } from "../data/projects";
 
@@ -35,10 +35,10 @@ const rows = byYear.map((project, i) => ({
       >
         <span class:list={["work-year", { "is-repeat": !newYear }]}>{p.year}</span>
         <span class="work-title">{p.title}</span>
-        {p.category && (
+        {p.role && (
           <>
             <span class="work-rule" aria-hidden="true"></span>
-            <span class="work-cat">{p.category}</span>
+            <span class="work-cat">{p.role}</span>
           </>
         )}
       </a>
@@ -151,7 +151,7 @@ const rows = byYear.map((project, i) => ({
     transition-delay: 160ms;
   }
 
-  /* Touch screens can't hover: show the categories outright */
+  /* Touch screens can't hover: show the roles outright */
   @media (hover: none) {
     .work-rule {
       transform: scaleX(1);
@@ -159,6 +159,23 @@ const rows = byYear.map((project, i) => ({
 
     .work-cat {
       opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* Narrow screens: the role drops to its own line under the title */
+  @media (max-width: 600px) {
+    .work-row {
+      flex-wrap: wrap;
+    }
+
+    .work-rule {
+      display: none;
+    }
+
+    .work-cat {
+      flex-basis: 100%;
+      margin: 3px 0 0 44px;
       transform: none;
     }
   }
