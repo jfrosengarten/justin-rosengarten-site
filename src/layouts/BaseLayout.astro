@@ -442,8 +442,8 @@ const path = Astro.url.pathname.replace(/\/$/, "");
 
   /* ── FOOTER ── */
   .site-footer {
-    background: #fff;
-    color: #0a0a0a;
+    background: var(--bg);
+    color: rgba(255, 255, 255, 0.92);
     font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
   }
 
@@ -453,7 +453,7 @@ const path = Astro.url.pathname.replace(/\/$/, "");
 
   .footer-rule {
     height: 1px;
-    background: rgba(0, 0, 0, 0.1);
+    background: rgba(255, 255, 255, 0.12);
   }
 
   .footer-cols {
@@ -468,7 +468,7 @@ const path = Astro.url.pathname.replace(/\/$/, "");
     font-weight: 400;
     letter-spacing: 0.12em;
     text-transform: uppercase;
-    color: rgba(0, 0, 0, 0.38);
+    color: rgba(255, 255, 255, 0.45);
     margin: 0 0 10px;
   }
 
@@ -476,7 +476,7 @@ const path = Astro.url.pathname.replace(/\/$/, "");
   .f-link {
     display: inline-block;
     text-decoration: none;
-    color: #0a0a0a;
+    color: rgba(255, 255, 255, 0.92);
     font-size: 13px;
     letter-spacing: 0.01em;
   }
@@ -507,7 +507,7 @@ const path = Astro.url.pathname.replace(/\/$/, "");
   }
 
   .footer-icon-link {
-    color: rgba(0, 0, 0, 0.4);
+    color: rgba(255, 255, 255, 0.45);
     display: flex;
     align-items: center;
     text-decoration: none;
@@ -525,7 +525,7 @@ const path = Astro.url.pathname.replace(/\/$/, "");
     align-items: center;
     padding: 16px 0;
     font-size: 11px;
-    color: rgba(0, 0, 0, 0.35);
+    color: rgba(255, 255, 255, 0.35);
     letter-spacing: 0.02em;
   }
 
