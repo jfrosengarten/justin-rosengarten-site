@@ -70,7 +70,7 @@ export const projects: Project[] = [
 
 The film follows environmentalist and explorer Paul Coleman and his wife, author Konomi Kikuchi, as they build a life of radical sustainability in a remote region of Patagonia, Chile.
 
-This film took me to the ends of the Earth — again — and stands as an energetic character study of the self-made, resilient world these two have built. It's a portrait of unity over fragmentation: a way of seeing, and a way of living, and a glimpse of what's possible.`,
+This film stands as an energetic character study of the self-made, resilient world these two have built. It's a portrait of unity over fragmentation: a way of seeing, and a way of living, and a glimpse of what's possible.`,
   },
   {
     title: "National Forest Foundation",
@@ -109,19 +109,29 @@ This film took me to the ends of the Earth — again — and stands as an energe
     ],
     blurb: `[Nature Connects Us](https://natureconnectsus.org/) is a national campaign commissioned by the National Forest Foundation, celebrating our connection to national forests and grasslands through a sense of place. The four-part series honored people who steward these lands and their inhabitants: [Rodney Stotts](https://www.birdmanrodney.com/about), [Jade Begay](https://www.jadebegay.com/about-us-sonora), [Dani Reyes-Acosta](https://danireyesacosta.com/), and [Dr. Len Necefer](https://drlennecefer.com/).
 
-This was a major producing effort, in partnership with [Thom Schroeder](https://woolleycreative.com/) of [Woolley Creative](https://woolleycreative.com/). We tracked down four distinct voices who fit the campaign, then designed an experience with each that would carry the story they wanted to tell. We traveled to four states — climbing mountains in the Sierras, traversing canyons in New Mexico.
-
-The real challenge was maintaining visual continuity across four very different landscapes, while holding a consistent tone through the editing and messaging.`,
+This was a major producing effort, in partnership with [Thom Schroeder](https://woolleycreative.com/) of [Woolley Creative](https://woolleycreative.com/). We tracked down four distinct voices who fit the campaign, then designed an experience with each that would carry the story they wanted to tell. We traveled to four states — climbing mountains in the Sierras, traversing canyons in New Mexico.`,
   },
   {
     title: "The Law",
     slug: "the-law",
     role: "Camera Operator",
+    streamUid: "c64e14db9f510680e52dc5d43fa7bcf4",
+    playerPoster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/15d4cf7d-ff97-4d46-5ccf-21b74ea9d400/public",
+    extraVideos: [
+      {
+        streamUid: "bfd6d31fca7e1bdfa000ec4228df2022",
+        poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/eb8d7aca-e117-43e3-2817-004c3ad09c00/public",
+      },
+      {
+        streamUid: "5f96f77b0b8b7d3290ff924c1b582735",
+        poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/fa6f214e-e3b5-457f-ac5d-260c76115200/public",
+      },
+    ],
     mp4: "/Motion%20Thumbs/THE-LAW_MOTION-THUMB.mp4",
     poster: "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/ba180138-e3bc-4c68-a95f-4828a855d800/public",
     year: "2023",
     format: "Video",
-    length: "TBD", // PLACEHOLDER — add once the video is on Cloudflare
+    length: "0:17, 0:26, 0:22",
     credits: [
       { role: "Directed by", name: "Jay Kolsch", url: "https://www.jaykolsch.com/" },
       {
@@ -202,15 +212,11 @@ The most recent project we made together is the documentary short [The Earthwalk
     credits: [
       { role: "Directed & Shot by", name: "Justin Rosengarten" },
     ],
-    blurb: `Freshly launched back into the film industry after a decade of baking bread, I was eager to start making work — and to me, the obvious story worth telling was life in a bakery.
+    blurb: `Freshly back in the film industry after a decade of baking bread, I was eager to make work rooted in a world I knew intimately — and few people embody that world like Nick Beitcher.
 
-Having recently moved to San Francisco, I was perfectly placed to follow some of the best bread bakers in the world, along with the unsung heroes of the Mission's baking scene — the witching-hour warriors at Dianda's and Jelly Donut.
+Nick, former head baker at Tartine, founded Midnight Bagel — a San Francisco artisan bagel business built on the same obsessive craft that defines the city's best bakeries. We knew each other from my years in the baking world, and he brought me on to create promotional content for the business.
 
-The central figure was Nick Beitcher, former head baker at Tartine and founder of Midnight Bagel. Nick was someone I knew from my years in the baking world, and he agreed to participate — though I came to realize it was more out of loyalty than any real desire to make the film. Understanding his position, and that he needed to focus on his team and his work, I let the project go.
-
-It never came to fruition. But this early attempt, after years away, got the wheels turning again — and it reminded me of what making a film demands, and what to stay mindful of. Above all: a subject's own reasons and appetite for being involved.
-
-What remains is a series of images that pay homage to the San Francisco baking scene without telling its story. One day, when the time is right, I intend to return to it.`,
+Along the way, I did some shooting around the city to capture the baking life of the Mission — its witching-hour warriors, the bakers at places like Dianda's and Jelly Donut putting in the overnight hours most people never see.`,
   },
   {
     title: "In and for the Wild",
@@ -228,11 +234,7 @@ What remains is a series of images that pay homage to the San Francisco baking s
     ],
     blurb: `In and for the Wild is a video about [Chulengo Expeditions](https://chulengo.org/), the life's work of conservationist Nadine Lehner. Nadine has built one of the most remarkable and far-flung adventure touring groups in the world, and she was instrumental in establishing Patagonia National Park — the 700,000-acre flagship reserve that's home to most of Chulengo's expeditions.
 
-I was invited to create branded content capturing the energy and intent of a Chulengo expedition. For ten days I traveled on foot with 80 pounds of gear on my back, camera in hand, documenting the reality of crossing the landscape in one of the most rugged and beautiful places on Earth.
-
-We persevered — but it was a fast lesson in overpacking. There's always a fine line between over-prepared and prepared, and experience is what tells the difference.
-
-This trip is what led me back to film a year later — deepening the interest that eventually brought me to work with Paul and his wife Konomi on [The Earthwalker](/the-earthwalker).`,
+I was invited to create branded content capturing the energy and intent of a Chulengo expedition. For ten days I traveled on foot with 80 pounds of gear on my back, camera in hand, documenting the reality of crossing the landscape in one of the most rugged and beautiful places on Earth.`,
   },
   {
     title: "Away Where?",
@@ -252,6 +254,6 @@ This trip is what led me back to film a year later — deepening the interest th
 
 The competition challenges filmmakers to take complex ideas from scientific literature and communicate them to a general audience through the language of cinema.
 
-Justin's film placed third. It's built entirely from public-domain found footage sourced from the Internet Archive — an approach of translating abstract ideas into visual metaphor that has shaped his style ever since.`,
+The film is built entirely from public-domain found footage sourced from the Internet Archive — an approach of translating abstract ideas into visual metaphor that has shaped my style ever since.`,
   },
 ];
