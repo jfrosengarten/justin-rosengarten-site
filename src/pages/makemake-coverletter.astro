@@ -1,5 +1,10 @@
 ---
 // Private screening page: not linked anywhere, excluded from the sitemap, noindex.
+// Plays the Stream video in a native <video> so the play button can sit off the face.
+const streamUrl =
+  "https://customer-nrvbnzpd60zikmrq.cloudflarestream.com/341d16b4e6066eb052e8622b63c93ad6/manifest/video.m3u8";
+const poster =
+  "https://imagedelivery.net/LngsP1G4XrZYr43CIDhlJw/7ebf0f34-4700-4abe-2928-fa532bcd1700/public";
 ---
 
 <html lang="en">
@@ -27,22 +32,78 @@
         width: min(100vw, calc(100vh * 16 / 9));
         aspect-ratio: 16 / 9;
       }
-      .player iframe {
+      .player video {
         position: absolute;
         inset: 0;
         width: 100%;
         height: 100%;
+        background: #000;
+      }
+      /* Lower-left corner, clear of the face in the poster */
+      .play {
+        position: absolute;
+        left: 5%;
+        bottom: 8%;
+        width: clamp(56px, 9vw, 96px);
+        aspect-ratio: 1;
+        padding: 0;
         border: none;
+        border-radius: 50%;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(6px);
+        -webkit-backdrop-filter: blur(6px);
+        color: #fff;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 150ms ease, transform 150ms ease;
+      }
+      .play:hover,
+      .play:focus-visible {
+        background: rgba(0, 0, 0, 0.65);
+        transform: scale(1.05);
+      }
+      .play svg {
+        width: 38%;
+        height: 38%;
+        margin-left: 8%;
+      }
+      .player.is-playing .play {
+        display: none;
       }
     </style>
   </head>
   <body>
     <div class="player">
-      <iframe
-        src="https://customer-nrvbnzpd60zikmrq.cloudflarestream.com/341d16b4e6066eb052e8622b63c93ad6/iframe?poster=https%3A%2F%2Fimagedelivery.net%2FLngsP1G4XrZYr43CIDhlJw%2F7ebf0f34-4700-4abe-2928-fa532bcd1700%2Fpublic"
-        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
-        allowfullscreen="true"
-      ></iframe>
+      <video poster={poster} playsinline preload="none" data-src={streamUrl}></video>
+      <button class="play" aria-label="Play video">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M5 3.5v17a1 1 0 0 0 1.5.86l14-8.5a1 1 0 0 0 0-1.72l-14-8.5A1 1 0 0 0 5 3.5z" />
+        </svg>
+      </button>
     </div>
+
+    <script is:inline src="https://cdn.jsdelivr.net/npm/hls.js@1.5.17/dist/hls.min.js"></script>
+    <script is:inline>
+      const player = document.querySelector(".player");
+      const video = player.querySelector("video");
+      const button = player.querySelector(".play");
+      const src = video.dataset.src;
+
+      if (window.Hls && Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(src);
+        hls.attachMedia(video);
+      } else {
+        video.src = src;
+      }
+
+      button.addEventListener("click", () => {
+        player.classList.add("is-playing");
+        video.controls = true;
+        video.play();
+      });
+    </script>
   </body>
 </html>
