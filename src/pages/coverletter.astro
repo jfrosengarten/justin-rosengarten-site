@@ -1,0 +1,48 @@
+---
+// Private screening page: not linked anywhere, excluded from the sitemap, noindex.
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Justin Rosengarten</title>
+    <link rel="icon" href="/favicon.svg" />
+    <style>
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: #000;
+      }
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .player {
+        position: relative;
+        width: min(100vw, calc(100vh * 16 / 9));
+        aspect-ratio: 16 / 9;
+      }
+      .player iframe {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        border: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="player">
+      <iframe
+        src="https://customer-nrvbnzpd60zikmrq.cloudflarestream.com/341d16b4e6066eb052e8622b63c93ad6/iframe?poster=https%3A%2F%2Fimagedelivery.net%2FLngsP1G4XrZYr43CIDhlJw%2F7ebf0f34-4700-4abe-2928-fa532bcd1700%2Fpublic"
+        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+        allowfullscreen="true"
+      ></iframe>
+    </div>
+  </body>
+</html>

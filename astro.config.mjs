@@ -4,7 +4,8 @@ import sitemap from '@astrojs/sitemap';
 
 export default defineConfig({
   site: 'https://justinrosengarten.com',
-  integrations: [sitemap()],
+  // Private video page stays out of the sitemap
+  integrations: [sitemap({ filter: (page) => !page.includes('/coverletter') })],
   redirects: {
     '/work': '/',
     // Retired project pages
