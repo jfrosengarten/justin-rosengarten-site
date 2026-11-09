@@ -169,6 +169,36 @@ const path = Astro.url.pathname.replace(/\/$/, "");
   workNav?.addEventListener('focusout', (e) => {
     if (!workNav.contains(e.relatedTarget as Node)) setWorkOpen(false);
   });
+
+  // Header tucks away while scrolling down and returns on a solid backdrop when
+  // scrolling up, so it never rests on top of page text. Clear over the hero at the top.
+  const headers = document.querySelectorAll('.site-header, .mobile-header');
+  let lastY = window.scrollY;
+  let ticking = false;
+
+  const updateHeader = () => {
+    const y = Math.max(window.scrollY, 0);
+    const delta = y - lastY;
+    const menuOpen =
+      workNav?.classList.contains('is-open') || menu?.classList.contains('is-open');
+
+    headers.forEach((h) => h.classList.toggle('is-solid', y > 10));
+    if (y <= 10 || menuOpen) {
+      headers.forEach((h) => h.classList.remove('is-hidden'));
+    } else if (Math.abs(delta) > 6) {
+      headers.forEach((h) => h.classList.toggle('is-hidden', delta > 0));
+    }
+    if (Math.abs(delta) > 6 || y <= 10) lastY = y;
+    ticking = false;
+  };
+
+  window.addEventListener('scroll', () => {
+    if (!ticking) {
+      ticking = true;
+      requestAnimationFrame(updateHeader);
+    }
+  }, { passive: true });
+  updateHeader();
 </script>
 
 <style>
@@ -195,6 +225,27 @@ const path = Astro.url.pathname.replace(/\/$/, "");
       z-index: 100;
       /* Let hovers/clicks pass through the header's empty space to content below */
       pointer-events: none;
+      transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    /* Backdrop behind the header once scrolled, fading out at its lower edge */
+    .site-header::before {
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: 0;
+      right: 0;
+      bottom: -24px;
+      background: linear-gradient(to bottom, var(--bg) calc(100% - 24px), transparent);
+      opacity: 0;
+      transition: opacity 250ms ease;
+      z-index: -1;
+    }
+
+    .site-header.is-solid::before { opacity: 1; }
+
+    .site-header.is-hidden {
+      transform: translateY(calc(-100% - 48px));
     }
 
     .site-header a {
@@ -210,11 +261,14 @@ const path = Astro.url.pathname.replace(/\/$/, "");
       gap: 5px;
     }
 
+    /* The name sits outside the flow (see .home-name), so this column keeps one
+       height whether or not the name is showing; the left padding is its lane */
     .identity-col {
       flex: 1;
       flex-direction: row;
       align-items: flex-start;
-      gap: 10px;
+      position: relative;
+      padding-left: 28px;
     }
 
     .home-name {
@@ -226,11 +280,23 @@ const path = Astro.url.pathname.replace(/\/$/, "");
       writing-mode: vertical-rl;
       transform: rotate(180deg);
       white-space: nowrap;
-      align-self: stretch;
+      position: absolute;
+      top: 8px;
+      left: 0;
+      width: 18px;
+      line-height: 18px;
       transition: opacity 150ms ease;
     }
 
     .home-name:hover { opacity: 0.65; }
+
+    /* Name fades out below the top of the page so the scrolled header stays short.
+       Only opacity changes, so nothing around it moves. */
+    .site-header.is-solid .home-name {
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 300ms ease;
+    }
 
 
     .identity-info {
@@ -366,6 +432,13 @@ const path = Astro.url.pathname.replace(/\/$/, "");
       left: 0;
       right: 0;
       z-index: 100;
+      transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    .mobile-header.is-hidden { transform: translateY(-100%); }
+
+    .mobile-header.is-solid .menu-toggle {
+      background: var(--bg);
     }
 
     .menu-toggle {
