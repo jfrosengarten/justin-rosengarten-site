@@ -60,6 +60,7 @@ export const projects: Project[] = [
     length: "21:57",
     credits: [
       { role: "Directed & Edited by", name: "Justin Rosengarten" },
+      { role: "Cinematography", name: "Justin Rosengarten" },
       { role: "Original Score", name: "Shaun Finnegan", url: "https://www.consolomusic.com/" },
       { role: "Sound Design", name: "Ignacio Bonet", url: "https://bonetstudio.com/" },
       { role: "Post Services", name: "Magen Entertainment", url: "https://magenentertainment.com/" },
@@ -105,6 +106,7 @@ This film stands as an energetic character study of the self-made, resilient wor
           { name: "Thom Schroeder", url: "https://woolleycreative.com/" },
         ],
       },
+      { role: "Cinematography by", name: "Justin Rosengarten" },
       { role: "Edited by", name: "Justin Rosengarten" },
     ],
     blurb: `[Nature Connects Us](https://natureconnectsus.org/) is a national campaign commissioned by the National Forest Foundation, celebrating our connection to national forests and grasslands through a sense of place. The four-part series honored people who steward these lands and their inhabitants: [Rodney Stotts](https://www.birdmanrodney.com/about), [Jade Begay](https://www.jadebegay.com/about-us-sonora), [Dani Reyes-Acosta](https://danireyesacosta.com/), and [Dr. Len Necefer](https://drlennecefer.com/).
